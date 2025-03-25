@@ -33,7 +33,18 @@ class UserSeeder extends Seeder
             'status' => 1,
         ]);
 
+        //user 2
+
+        $admin_2 = User::create([
+            'name' => 'Bryan Rebaza',
+            'email' => 'Bryanre@gmail.com',
+            'username' => 'Bryan11',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+
         $adminRole->syncPermissions($permissions);
         $admin_1->assignRole($adminRole);
+        $admin_2->assignRole($adminRole);
     }
 }
