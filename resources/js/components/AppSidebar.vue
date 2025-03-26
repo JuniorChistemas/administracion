@@ -19,6 +19,11 @@ const mainNavItems: NavItem[] = [
         href: '/panel/users',
         icon: Shield,
     },
+    {
+        title: 'Proveedores',
+        href: '/panel/suppliers',
+        icon: Shield,
+    },
 ];
 
 const mainNavItems2: NavItem[] = [
