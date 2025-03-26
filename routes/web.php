@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Panel\UserController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,6 +27,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('suppliers', SupplierController::class);
         # list suppliers
             Route::get('listar-suppliers',[SupplierController::class,'listarProveedor'])->name('suppliers.listar');    
+        # module Services
+            Route::resource('services', ServiceController::class);
+        # list Services
+            Route::get('listar-services',[ServiceController::class,'listarServices'])->name('services.listar');
     });
 });
 
