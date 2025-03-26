@@ -33,16 +33,57 @@ class UserSeeder extends Seeder
             'status' => 1,
         ]);
 
-        $admin_3 = User::create([
+        $admin_2 = User::create([
+            'name' => 'Bryan Rebaza',
+            'email' => 'Bryanre@gmail.com',
+            'username' => 'Bryan11',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+         $admin_3 = User::create([
             'name' => 'Pablo Isaac Lupu Garcia',
             'email' => 'pablolupu2020@gmail.com',
             'username' => 'pablolupu',
             'password' => Hash::make('12345678'),
             'status' => 1,
         ]);
+        $admin_4 = User::create([
+            'name' => 'Jesus Junior',
+            'email' => 'junior4@gmail.com',
+            'username' => 'jesus17',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+        $admin_5 = User::create([
+            'name' => 'Jesus Junior',
+            'email' => 'junior5@gmail.com',
+            'username' => 'jesus18',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+        $admin_6 = User::create([
+            'name' => 'Jesus Junior',
+            'email' => 'junior6@gmail.com',
+            'username' => 'jesus19',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
+        $admin_7 = User::create([
+            'name' => 'Jesus Junior',
+            'email' => 'junior7@gmail.com',
+            'username' => 'jesus20',
+            'password' => Hash::make('12345678'),
+            'status' => 1,
+        ]);
 
+  
         $adminRole->syncPermissions($permissions);
         $admin_1->assignRole($adminRole);
+        $admin_2->assignRole($adminRole);
         $admin_3->assignRole($adminRole);
+        $admin_4->assignRole($adminRole);
+        $admin_5->assignRole($adminRole);
+        $admin_6->assignRole($adminRole);
+        $admin_7->assignRole($adminRole);
     }
 }
