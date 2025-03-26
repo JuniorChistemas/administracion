@@ -93,5 +93,6 @@ class UserSeeder extends Seeder
         $admin_5->assignRole($adminRole);
         $admin_6->assignRole($adminRole);
         $admin_7->assignRole($adminRole);
+        $admin_8->assignRole($adminRole);
     }
 }
