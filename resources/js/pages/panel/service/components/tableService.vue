@@ -17,7 +17,7 @@
                 <TableRow v-for="service in serviceList" :key="service.id">
                     <td class="text-center font-bold">{{ service.id }}</td>
                     <td>{{ service.name }}</td>
-                    <td>{{ service.cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) }}</td>
+                    <td>{{ service.cost.toLocaleString('es-Pe', { style: 'currency', currency: 'PEN' }) }}</td>
                     <td>{{ formatDate(service.ini_date) }}</td>
                     <td class="text-center">
                         <span 
