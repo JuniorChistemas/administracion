@@ -66,8 +66,8 @@
                             </FormItem>
                         </FormField>
                         <div class="container flex justify-end gap-4">
-                            <Button type="submit" variant="default" class="bg-green-500"> Enviar </Button>
-                            <Button type="reset" variant="destructive"> Borrar </Button>
+                            <Button type="submit" variant="default"> Enviar </Button>
+                            <Button type="reset" variant="outline"> Borrar </Button>
                         </div>
                     </form>
                 </CardContent>
@@ -86,10 +86,14 @@ import SelectTrigger from '@/components/ui/select/SelectTrigger.vue';
 import SelectValue from '@/components/ui/select/SelectValue.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
+
+//composable
+import { useUser } from '@/composables/useUser';
+const { createUser } = useUser();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -131,15 +135,7 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 const onSubmit = handleSubmit((values) => {
-    // toast({
-    //     title: 'Datos a enviar al servidor',
-    //     description: h(
-    //         'pre',
-    //         { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-    //         h('code', { class: 'text-white' }, JSON.stringify(values, null, 2)),
-    //     ),
-    // });
-    router.post(route('panel.users.store'), values);
+    createUser(values);
 });
 </script>
 <style scoped></style>
