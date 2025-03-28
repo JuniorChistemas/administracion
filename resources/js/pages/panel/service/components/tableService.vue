@@ -1,76 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <div class="container mx-auto py-6 px-0">
-
-      <!-- Edit Service Modal -->
-      <EditServiceModal 
-        :service="selectedService" 
-        :is-open="editModalOpen" 
-        @update:is-open="editModalOpen = $event"
-        @service-updated="handleServiceUpdate"
-      />
-
-       <!-- Delete Confirmation Modal -->
-      <DeleteConfirmationModal 
-        :service="selectedService" 
-        :is-open="deleteConfirmationOpen"
-        @update:is-open="deleteConfirmationOpen = $event"
-        @service-deleted="handleServiceDelete"
-      />
-  
-      <Table class="w-full border border-gray-100 rounded-lg overflow-clip">
-        <TableCaption>Lista de servicios</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead class="text-center">ID</TableHead>
-            <TableHead class="w-[100px]">Nombre</TableHead>
-            <TableHead>Costo</TableHead>
-            <TableHead>Fecha de Inicio</TableHead>
-            <TableHead>Estado</TableHead>
-            <TableHead class="text-center">Acciones</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow v-for="service in serviceList" :key="service.id">
-            <td class="text-center font-bold">{{ service.id }}</td>
-            <td>{{ service.name }}</td>
-            <td>{{ service.cost.toFixed(2) }}</td>
-            <td>{{ formatDate(service.ini_date) }}</td>
-            <td class="w-[100px] text-center">
-              <span
-                :class="{
-                  'bg-green-400': service.state === 'activo',
-                  'bg-yellow-400': service.state === 'pendiente',
-                  'bg-red-400': service.state === 'inactivo'
-                }"
-                class="text-white px-2 py-1 rounded-full"
-              >
-                {{ service.state === 'activo' ? 'Activo' : 
-                   service.state === 'pendiente' ? 'Pendiente' : 'Inactivo' }}
-              </span>
-            </td>
-            <td class="flex gap-2 justify-center">
-              <Button 
-                variant="outline" 
-                @click="openEditModal(service)"
-              >
-                <UserPen class="w-4 h-4" />
-              </Button>
-              <Button 
-                variant="link" 
-                @click="openDeleteConfirmation(service)"
-              >
-                <Trash class="w-4 h-4" />
-              </Button>
-            </td>
-          </TableRow>
-        </TableBody>
-      </Table>
-      <PaginationUser 
-        :meta="servicePaginate"
-        @page-change="$emit('page-change', $event)"
-      />
-=======
     <div class="container mx-auto px-0 py-6">
         <!-- Edit Service Modal -->
         <EditServiceModal
@@ -130,7 +58,6 @@
             </TableBody>
         </Table>
         <PaginationUser :meta="servicePaginate" @page-change="$emit('page-change', $event)" />
->>>>>>> 222339830eaffb90182bd182de476307691cb258
     </div>
   </template>
   
