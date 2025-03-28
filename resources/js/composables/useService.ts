@@ -3,6 +3,7 @@ import { ServiceRequest, ServiceResource, ServiceUpdateRequest } from '@/pages/p
 import { ServiceServices } from '@/services/serviceServices';
 import { showSuccessMessage } from '@/utils/message';
 import { reactive } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 export const useService = () => {
     const principal = reactive<{
@@ -81,7 +82,7 @@ export const useService = () => {
                 showSuccessMessage('Servicio Creado', 'El servicio se creó correctamente');
                 
                 // Navigate to users panel or services list
-                router.visit('/panel/users');
+                router.visit('/panel/services');
             }
         } catch (error: any) {
             // Handle different types of errors

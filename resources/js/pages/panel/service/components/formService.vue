@@ -156,17 +156,6 @@ const onSubmit = handleSubmit((values) => {
     createService(serviceData);
 });
 
-export const showSuccessMessage = (title: string, message: string) => {
-    toast.success(title, {
-        description: message
-    });
-};
-
-export const showErrorMessage = (title: string, message: string) => {
-    toast.error(title, {
-        description: message
-    });
-};
 
 </script>
 
