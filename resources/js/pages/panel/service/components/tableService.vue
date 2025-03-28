@@ -61,7 +61,7 @@
     </div>
   </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from 'vue'
   import { Pagination } from '@/interface/paginacion'
   import { ServiceResource } from '../interface/Service'
@@ -78,59 +78,43 @@
   import axios from 'axios'
   import DeleteConfirmationModal from './deleteServiceModal.vue';
 
-<script setup lang="ts">
-import Button from '@/components/ui/button/Button.vue';
-import Table from '@/components/ui/table/Table.vue';
-import TableBody from '@/components/ui/table/TableBody.vue';
-import TableCaption from '@/components/ui/table/TableCaption.vue';
-import TableHead from '@/components/ui/table/TableHead.vue';
-import TableHeader from '@/components/ui/table/TableHeader.vue';
-import TableRow from '@/components/ui/table/TableRow.vue';
-import { Pagination } from '@/interface/paginacion';
-import { Trash, UserPen } from 'lucide-vue-next';
-import { ref } from 'vue';
-import { ServiceResource } from '../interface/Service';
-import DeleteConfirmationModal from './deleteServiceModal.vue';
-import EditServiceModal from './editServiceModal.vue';
-import PaginationUser from './paginationService.vue';
+  const props = defineProps<{
+      serviceList: ServiceResource[];
+      servicePaginate: Pagination;
+  }>();
 
-const props = defineProps<{
-    serviceList: ServiceResource[];
-    servicePaginate: Pagination;
-}>();
+  const emits = defineEmits(['page-change', 'services-updated']);
 
-const emits = defineEmits(['page-change', 'services-updated']);
+  const selectedService = ref<ServiceResource | undefined>(undefined);
+  const editModalOpen = ref(false);
+  const deleteConfirmationOpen = ref(false);
 
-const selectedService = ref<ServiceResource | undefined>(undefined);
-const editModalOpen = ref(false);
-const deleteConfirmationOpen = ref(false);
+  const openEditModal = (service: ServiceResource) => {
+      selectedService.value = service;
+      editModalOpen.value = true;
+  };
 
-const openEditModal = (service: ServiceResource) => {
-    selectedService.value = service;
-    editModalOpen.value = true;
-};
+  const formatDate = (dateString: string) => {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+      }).format(date);
+  };
 
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    }).format(date);
-};
+  const openDeleteConfirmation = (service: ServiceResource) => {
+      selectedService.value = service;
+      deleteConfirmationOpen.value = true;
+  };
 
-const openDeleteConfirmation = (service: ServiceResource) => {
-    selectedService.value = service;
-    deleteConfirmationOpen.value = true;
-};
+  const handleServiceUpdate = () => {
+      // Emit event to parent to refresh services list
+      emits('services-updated');
+  };
 
-const handleServiceUpdate = () => {
-    // Emit event to parent to refresh services list
-    emits('services-updated');
-};
-
-const handleServiceDelete = () => {
-    // Trigger services list refresh
-    emits('services-updated');
-};
+  const handleServiceDelete = () => {
+      // Trigger services list refresh
+      emits('services-updated');
+  };
 </script>
