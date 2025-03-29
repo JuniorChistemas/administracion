@@ -6,8 +6,8 @@
         :sibling-count="1"
         show-edges
         :default-page="props.meta.current_page"
-        :key="props.meta.current_page"
         class="flex justify-center gap-2"
+        :key="props.meta.current_page"
     >
         <PaginationList v-slot="{ items }" class="flex items-center gap-1">
             <PaginationFirst @click="handlePageChange(1)" />
