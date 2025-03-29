@@ -11,7 +11,7 @@ class UpdateSupplierRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,9 @@ class UpdateSupplierRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'ruc' => 'required|string|size:11' .$this->supplier->id,
-            'address' => 'required|string|max:100' .$this->supplier->id,
-            'state' => 'required|boolean',
+            'ruc' => 'required|string|size:11',
+            'address' => 'required|string|max:100', 
+            'state' => 'required|string|in:activo,inactivo',
         ];
     }
 }

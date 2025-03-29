@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto px-0 py-6">
-        <LoadingTable v-if="loading" :headers="6" :row-count="20" />
-           <Table class="my-3 w-full overflow-clip rounded-lg border border-gray-100">
+        <LoadingTable v-if="loading" :headers="6" :row-count="10" />
+           <Table v-else class="my-3 w-full overflow-clip rounded-lg border border-gray-100">
                <TableCaption>Lista de proveedores</TableCaption>
                <TableHeader>
                    <TableRow>
@@ -13,7 +13,7 @@
                        <TableHead class="text-center">Acciones</TableHead>
                    </TableRow>
                </TableHeader>
-               <TableBody class="cursos-pointer">
+               <TableBody class="cursor-pointer">
                    <TableRow v-for="supplier in supplierList" :key="supplier.id">
                        <td class="text-center font-bold">{{ supplier.id }}</td>
                        <td class="text-left px-2">{{ supplier.name }}</td>

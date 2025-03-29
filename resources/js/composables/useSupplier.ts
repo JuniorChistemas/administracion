@@ -117,6 +117,7 @@ export const useSupplier = () => {
     const deleteSupplier = async (id: number) => {
         try {
             const response = await SupplierServices.destroy(id);
+            console.log(response.state);
             if (response.state) {
                 showSuccessMessage('Proveedor eliminado', 'El Proveedor se elimino correctamente');
                 principal.stateModal.delete = false;

@@ -12,7 +12,7 @@ export const SupplierServices = {
     },
     //inertia
     async store(data: SupplierRequest)  {
-        router.post(route('suppliers.store'), data);
+        router.post(route('panel.suppliers.store'), data);
     },
     // show supplier
     async show(id: number): Promise<showSupplierResponse> {
@@ -26,6 +26,7 @@ export const SupplierServices = {
     },
     // detele supplier
     async destroy(id: number): Promise<SupplierDeleteResponse> {
-        return await axios.delete(`suppliers/${id}`);
-    }
-}
+        const response = await axios.delete(`suppliers/${id}`);
+        return response.data;
+    },
+};

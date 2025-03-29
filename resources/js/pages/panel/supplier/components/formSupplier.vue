@@ -125,6 +125,7 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 const onSubmit = handleSubmit((values) => {
+    console.log('hola')
     createSupplier(values);
 });
 </script>
