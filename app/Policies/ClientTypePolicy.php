@@ -13,7 +13,7 @@ class ClientTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view type clients');  
+        return $user->can('ver tipos_clientes');  
     }
 
     /**
@@ -21,7 +21,7 @@ class ClientTypePolicy
      */
     public function view(User $user, ClientType $clientType): bool
     {
-        return $user->can('view type client');
+        return $user->can('ver tipos_clientes');
     }
 
     /**
@@ -29,7 +29,7 @@ class ClientTypePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create type client');
+        return $user->can('crear tipos_clientes');
     }
 
     /**
@@ -37,7 +37,7 @@ class ClientTypePolicy
      */
     public function update(User $user, ClientType $clientType): bool
     {
-        return $user->can('edit type client');
+        return $user->can('editar tipos_clientes');
     }
 
     /**
@@ -45,7 +45,7 @@ class ClientTypePolicy
      */
     public function delete(User $user, ClientType $clientType): bool
     {
-        return $user->can('delete type client');
+        return $user->can('eliminar tipos_clientes');
     }
 
     /**

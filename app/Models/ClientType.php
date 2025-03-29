@@ -13,10 +13,4 @@ class ClientType extends Model
         'name',
         'state',
     ];
-
-    protected $casts = [
-        'state' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
 }

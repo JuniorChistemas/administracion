@@ -11,7 +11,7 @@ class UpdateClientTypeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,8 @@ class UpdateClientTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
-            'state' => 'required|boolean',
+            'name' => 'required|string',
+            'state' => 'required|string|in:activo,inactivo',
         ];
     }
 }
