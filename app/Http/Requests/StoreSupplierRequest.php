@@ -25,7 +25,7 @@ class StoreSupplierRequest extends FormRequest
             'name' => 'required|string',
             'ruc' => 'required|string|size:11|unique:supplier',
             'address' => 'required|string|max:100',
-            'state' => 'required|boolean',
+            'state' => 'required|string|in:activo,inactivo',
         ];
     }
 }
