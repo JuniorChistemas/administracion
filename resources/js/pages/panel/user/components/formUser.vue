@@ -97,15 +97,21 @@ const { createUser } = useUser();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'usuarios',
+        title: 'Usuarios',
         href: '/panel/users',
     },
     {
-        title: 'Exportar',
-        href: '/panel/users/export',
+        title: 'Exportar a Excel',
+        href: '/panel/export-excel-users',
+        download: true,
     },
     {
-        title: 'crear usuario',
+        title: 'Exportar a PDF',
+        href: '/panel/export-pdf-users',
+        download: true,
+    },
+    {
+        title: 'Crear Usuario',
         href: '/panel/users/create',
     },
 ];

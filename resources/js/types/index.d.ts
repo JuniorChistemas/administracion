@@ -8,7 +8,11 @@ export interface Auth {
 
 export interface BreadcrumbItem {
     title: string;
-    href: string;
+    href?: string;
+    target?: string;
+    download?: boolean;
+
+
 }
 
 export interface NavItem {

@@ -5,6 +5,8 @@ import { Link } from '@inertiajs/vue3';
 interface BreadcrumbItem {
     title: string;
     href?: string;
+    download?: boolean; // 🔹 Nuevo parámetro para identificar descargas
+
 }
 
 defineProps<{
@@ -21,9 +23,12 @@ defineProps<{
                         <BreadcrumbPage>{{ item.title }}</BreadcrumbPage>
                     </template>
                     <template v-else>
-                        <BreadcrumbLink as-child>
+                        <template v-if="item.download">
+                            <a :href="item.href" target="_blank" download>{{ item.title }}</a>
+                        </template>
+                        <template v-else>
                             <Link :href="item.href ?? '#'">{{ item.title }}</Link>
-                        </BreadcrumbLink>
+                        </template>
                     </template>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator v-if="index !== breadcrumbs.length - 1" />
