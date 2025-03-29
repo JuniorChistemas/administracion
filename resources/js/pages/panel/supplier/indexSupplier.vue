@@ -17,8 +17,22 @@ import { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
+        title: 'Agregar Proveedor',
+        href: '#',
+    },
+    {
+        title: 'Exportar a Excel',
+        href: '/panel/export-excel-suppliers',
+        download: true,
+    },
+    {
+        title: 'Exportar a PDF',
+        href: '/panel/export-pdf-suppliers',
+        download: true,
+    },
+    {
+        title: 'Proveedores',
+        href: '/panel/suppliers',
     },
 ];
 

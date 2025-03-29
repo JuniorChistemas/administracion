@@ -41,12 +41,18 @@ import { ServiceUpdateRequest } from './interface/Service'; // You'll need to cr
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Crear servicio',
-        href: '/panel/services/create',
+        title: 'Agregar Servicio',
+        href: '#',
     },
     {
-        title: 'Exportar',
-        href: '/panel/services/export',
+        title: 'Exportar a Excel',
+        href: '/panel/export-excel-services',
+        download: true,
+    },
+    {
+        title: 'Exportar a PDF',
+        href: '/panel/export-pdf-services',
+        download: true,
     },
     {
         title: 'Servicios',

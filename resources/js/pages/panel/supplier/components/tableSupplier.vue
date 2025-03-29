@@ -1,12 +1,13 @@
 <template>
     <div class="container mx-auto py-6 px-0">
+            <!-- Tabla Proveedores -->
            <Table class="w-full border border-gray-100 rounded-lg overflow-clip">
                <TableCaption>Lista de proveedores</TableCaption>
                <TableHeader>
                    <TableRow>
                        <TableHead class="text-center">ID</TableHead>    
                        <TableHead class="w-[100px]">Nombre</TableHead>
-                       <TableHead class="text-left px-10">Ruc</TableHead>
+                       <TableHead class="text-left px-10">RUC</TableHead>
                        <TableHead class="text-left px-1">Dirección</TableHead>
                        <TableHead>Estado</TableHead>
                        <TableHead class="text-center">Acciones</TableHead>
@@ -23,10 +24,10 @@
                            <span v-else class="bg-red-400 text-white px-2 py-1 rounded-full">Inactivo</span>
                        </td>
                        <td class="flex gap-2 justify-center">
-                           <Button variant="outline">
+                           <Button variant="outline" class="bg-orange-400 text-white shadow-md hover:bg-orange-600">
                                <UserPen class="w-4 h-4" />
                            </Button>
-                           <Button variant="link">
+                           <Button variant="link" class="bg-red-400 text-white shadow-md hover:bg-red-600">
                                <Trash class="w-4 h-4" />
                            </Button>
                        </td>

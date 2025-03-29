@@ -118,6 +118,7 @@ const getStateDisplay = (state: boolean | string): { text: string, color: string
         color: stateString === 'Activo' ? 'bg-green-400' : 'bg-red-400'
     };
 };
+
 </script>
 
 <style scoped lang="css"></style>

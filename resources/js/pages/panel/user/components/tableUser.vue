@@ -1,5 +1,6 @@
 <template>
     <div class="container mx-auto px-0 py-6">
+        <!-- Tabla Usuarios -->
         <LoadingTable v-if="loading" :headers="7" :row-count="15" />
         <Table v-else class="my-3 w-full overflow-clip rounded-lg border border-gray-100">
             <TableCaption>{{ userPaginate.current_page }} de {{ userPaginate.total }}</TableCaption>
@@ -83,5 +84,6 @@ const openModal = (id: number) => {
 const openModalDelete = (id: number) => {
     emit('open-modal-delete', id);
 };
+
 </script>
 <style scoped lang="css"></style>

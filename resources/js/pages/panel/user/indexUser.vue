@@ -24,6 +24,7 @@
                     @delete-user="emitDeleteUser"
                 />
             </div>
+            
         </div>
     </AppLayout>
 </template>
@@ -40,15 +41,21 @@ import { UserUpdateRequest } from './interface/User';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'crear usuario',
+        title: 'Crear Usuario',
         href: '/panel/users/create',
     },
     {
-        title: 'Exportar',
-        href: '/panel/users/export',
+        title: 'Exportar a Excel',
+        href: '/panel/export-excel-users',
+        download: true,
     },
     {
-        title: 'usuarios',
+        title: 'Exportar a PDF',
+        href: '/panel/export-pdf-users',
+        download: true,
+    },
+    {
+        title: 'Usuarios',
         href: '/panel/users',
     },
 ];
@@ -92,5 +99,6 @@ const openDeleteModal = (userId: number) => {
 const emitDeleteUser = (userId: number) => {
     deleteUser(userId);
 };
+
 </script>
 <style lang="css" scoped></style>
