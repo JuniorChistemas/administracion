@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class UserController extends Controller
             $name = $request->get('name');
             $users = User::when($name, function ($query, $name) {
                 return $query->where('name', 'like', "%$name%");
-            })->paginate(15);
+            })->orderBy('id','asc')->paginate(15);
             return response()->json([
                 'users' => UserResource::collection($users),
                 'pagination' => [
@@ -73,9 +74,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        Gate::authorize('view', $user);
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario encontrado',
+            'user' => new UserResource($user),
+        ], 200);
     }
 
     /**
@@ -89,16 +95,29 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        Gate::authorize('update', $user);
+        $validated = $request->validated();
+        $validated['status'] = ($validated['status'] ?? 'inactivo') === 'activo';
+        $user->update($validated);
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario actualizado correctamente',
+            'user' => new UserResource($user->refresh()),
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        Gate::authorize('delete', $user);
+        $user->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario eliminado correctamente',
+        ]);
     }
 }

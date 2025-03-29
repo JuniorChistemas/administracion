@@ -1,8 +1,8 @@
 import { Pagination } from '@/interface/paginacion';
-import { UserResource } from '@/pages/panel/user/interface/User';
+import { UserRequest, UserResource, UserUpdateRequest } from '@/pages/panel/user/interface/User';
 import { UserServices } from '@/services/userServices';
-import { onMounted, reactive } from 'vue';
-
+import { showSuccessMessage } from '@/utils/message';
+import { reactive } from 'vue';
 export const useUser = () => {
     const principal = reactive<{
         userList: UserResource[];
@@ -11,7 +11,6 @@ export const useUser = () => {
         filter: string;
         idUser: number;
         statusModal: {
-            register: boolean;
             update: boolean;
             delete: boolean;
         };
@@ -30,7 +29,6 @@ export const useUser = () => {
         filter: '',
         idUser: 0,
         statusModal: {
-            register: false,
             update: false,
             delete: false,
         },
@@ -43,28 +41,99 @@ export const useUser = () => {
             created_at: '',
         },
     });
+    //reset user data
+    const resetUserData = () => {
+        principal.userData = {
+            id: 0,
+            name: '',
+            email: '',
+            username: '',
+            status: true,
+            created_at: '',
+        };
+    };
     // loading users
-    const loadingUsers = async (page: number = 1, name: string = '', status: boolean = true) => {
-        if (status) {
-            principal.loading = true;
-            try {
-                const response = await UserServices.index(page, name);
-                principal.userList = response.users;
-                principal.paginacion = response.pagination;
-                console.log(response);
-            } catch (error) {
-                console.error(error);
-            }finally{
-                principal.loading = false;
-            }
+    const loadingUsers = async (page: number = 1, name: string = '') => {
+        principal.loading = true;
+        try {
+            const response = await UserServices.index(page, name);
+            principal.userList = response.users;
+            principal.paginacion = response.pagination;
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            principal.loading = false;
         }
     };
-
-    onMounted(() => {
-        loadingUsers();
-    });
+    // creating user
+    const createUser = async (data: UserRequest) => {
+        try {
+            await UserServices.store(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    // get user by id
+    const getUserById = async (id: number) => {
+        try {
+            if (id === 0) {
+                principal.userData = {
+                    id: 0,
+                    name: '',
+                    email: '',
+                    username: '',
+                    status: true,
+                    created_at: '',
+                };
+                return;
+            }
+            const response = await UserServices.show(id);
+            if (response.status) {
+                principal.userData = response.user;
+                console.log(principal.userData.name);
+                principal.idUser = response.user.id;
+                principal.statusModal.update = true;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    // update user
+    const updateUser = async (id: number, data: UserUpdateRequest) => {
+        try {
+            const response = await UserServices.update(id, data);
+            if (response.status) {
+                showSuccessMessage('Usuario actualizado', 'El usuario se actualizo correctamente');
+                principal.statusModal.update = false;
+                loadingUsers(principal.paginacion.current_page, principal.filter);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    // delete user
+    const deleteUser = async (id: number) => {
+        try {
+            const response = await UserServices.destroy(id);
+            if (response.status) {
+                showSuccessMessage('Usuario eliminado', 'El usuario se elimino correctamente');
+                principal.statusModal.delete = false;
+                loadingUsers(principal.paginacion.current_page, principal.filter);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            principal.statusModal.delete = false;
+        }
+    };
     return {
         principal,
         loadingUsers,
+        createUser,
+        getUserById,
+        resetUserData,
+        updateUser,
+        deleteUser,
     };
 };

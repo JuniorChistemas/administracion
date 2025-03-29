@@ -1,51 +1,42 @@
 <template>
-    <Head title="Nuevo Usuario"></Head>
+    <Head title="Nuevo Proveedor"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Card class="mt-4 flex flex-col gap-4">
                 <CardHeader>
-                    <CardTitle>NUEVO USUARIO</CardTitle>
-                    <CardDescription>Complete los campos para crear un nuevo usuario</CardDescription>
+                    <CardTitle>NUEVO PROVEEDOR</CardTitle>
+                    <CardDescription>Complete los campos para crear un nuevo proveedor</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit="onSubmit" class="flex flex-col gap-6">
                         <FormField v-slot="{ componentField }" name="name">
                             <FormItem>
-                                <FormLabel>Nombre</FormLabel>
+                                <FormLabel>Razón Social</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="nombre y apellidos" v-bind="componentField" />
+                                    <Input type="text" placeholder="nombre" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="email">
+                        <FormField v-slot="{ componentField }" name="ruc">
                             <FormItem>
-                                <FormLabel>Correo Electrónico</FormLabel>
+                                <FormLabel>Ruc</FormLabel>
                                 <FormControl>
-                                    <Input type="email" placeholder="user@gmail.com" v-bind="componentField" />
+                                    <Input type="text" placeholder="10000000000" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="username">
+                        <FormField v-slot="{ componentField }" name="address">
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Dirección</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="USER01" v-bind="componentField" />
+                                    <Input type="text" placeholder="Calle Los Cocos 145, Urb. Santa María del Pinar" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="password">
-                            <FormItem>
-                                <FormLabel>Contraseña</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="********" v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                        <FormField v-slot="{ componentField }" name="status">
+                        <FormField v-slot="{ componentField }" name="state">
                             <FormItem>
                                 <FormLabel>Estado</FormLabel>
                                 <FormControl>
@@ -92,21 +83,21 @@ import { useForm } from 'vee-validate';
 import * as z from 'zod';
 
 //composable
-import { useUser } from '@/composables/useUser';
-const { createUser } = useUser();
+import { useSupplier } from '@/composables/useSupplier';
+const { createSupplier } = useSupplier();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'usuarios',
-        href: '/panel/users',
+        title: 'proveedores',
+        href: '/panel/suppliers',
     },
     {
         title: 'Exportar',
-        href: '/panel/users/export',
+        href: '/panel/suppliers/export',
     },
     {
-        title: 'crear usuario',
-        href: '/panel/users/create',
+        title: 'crear proveedor',
+        href: '/panel/suppliers/create',
     },
 ];
 
@@ -115,18 +106,17 @@ const formSchema = toTypedSchema(
     z.object({
         name: z
             .string({ message: 'campo obligatorio' })
-            .min(1, { message: 'nombre mayor a 2 letras' })
+            .min(1, { message: 'nombre mayor a 5 letras' })
             .max(50, { message: 'nombre menor a 50 letras' }),
-        email: z.string({ message: 'campo obligatorio' }).email({ message: 'correo invalido' }),
-        username: z
+        ruc: z
+            .string({ message: 'Campo obligatorio' })
+            .length(11, { message: 'El RUC debe tener 11 dígitos' })
+            .regex(/^\d+$/, { message: 'El RUC solo debe contener números' }),
+        address: z
             .string({ message: 'campo obligatorio' })
-            .min(2, { message: 'usuario mayor a 2 letras' })
-            .max(50, { message: 'usuario menor a 50 letras' }),
-        password: z
-            .string({ message: 'campo obligatorio' })
-            .min(8, { message: 'contraseña debe ser mayor de 8 digitos' })
-            .max(50, { message: 'contraseña menor a 50 digitos' }),
-        status: z.enum(['activo', 'inactivo'], { message: 'estado invalido' }),
+            .min(2, { message: 'dirección mayor a 5 letras' })
+            .max(50, { message:'direccion menor a 50 letras' }),
+        state: z.enum(['activo', 'inactivo'], { message: 'estado invalido' }),
     }),
 );
 
@@ -135,7 +125,8 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 const onSubmit = handleSubmit((values) => {
-    createUser(values);
+    console.log('hola')
+    createSupplier(values);
 });
 </script>
 <style scoped></style>
