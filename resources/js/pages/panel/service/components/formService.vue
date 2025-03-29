@@ -1,51 +1,46 @@
+
 <template>
-    <Head title="Nuevo Usuario"></Head>
+    <Head title="Nuevo Servicio"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Card class="mt-4 flex flex-col gap-4">
                 <CardHeader>
-                    <CardTitle>NUEVO USUARIO</CardTitle>
-                    <CardDescription>Complete los campos para crear un nuevo usuario</CardDescription>
+                    <CardTitle>NUEVO SERVICIO</CardTitle>
+                    <CardDescription>Complete los campos para crear un nuevo servicio</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit="onSubmit" class="flex flex-col gap-6">
                         <FormField v-slot="{ componentField }" name="name">
                             <FormItem>
-                                <FormLabel>Nombre</FormLabel>
+                                <FormLabel>Nombre del Servicio</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="nombre y apellidos" v-bind="componentField" />
+                                    <Input type="text" placeholder="Nombre del servicio" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="email">
+                        
+                        <FormField v-slot="{ componentField }" name="cost">
                             <FormItem>
-                                <FormLabel>Correo Electrónico</FormLabel>
+                                <FormLabel>Costo</FormLabel>
                                 <FormControl>
-                                    <Input type="email" placeholder="user@gmail.com" v-bind="componentField" />
+                                    <Input type="number" placeholder="0.00" step="0.01" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="username">
+                        
+                        <FormField v-slot="{ componentField }" name="ini_date">
                             <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Fecha de Inicio</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="USER01" v-bind="componentField" />
+                                    <Input type="date" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="password">
-                            <FormItem>
-                                <FormLabel>Contraseña</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="********" v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                        <FormField v-slot="{ componentField }" name="status">
+                        
+                        <FormField v-slot="{ componentField }" name="state">
                             <FormItem>
                                 <FormLabel>Estado</FormLabel>
                                 <FormControl>
@@ -56,8 +51,8 @@
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Estado</SelectLabel>
-                                                <SelectItem value="activo"> activo </SelectItem>
-                                                <SelectItem value="inactivo"> inactivo </SelectItem>
+                                                <SelectItem value="activo">Activo</SelectItem>
+                                                <SelectItem value="inactivo">Inactivo</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -65,9 +60,10 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
+                        
                         <div class="container flex justify-end gap-4">
-                            <Button type="submit" variant="default"> Enviar </Button>
-                            <Button type="reset" variant="outline"> Borrar </Button>
+                            <Button type="submit" variant="default">Crear Servicio</Button>
+                            <Button type="reset" variant="outline">Borrar</Button>
                         </div>
                     </form>
                 </CardContent>
@@ -75,6 +71,7 @@
         </div>
     </AppLayout>
 </template>
+
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -90,23 +87,22 @@ import { Head } from '@inertiajs/vue3';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
+import { router } from '@inertiajs/vue3';
+import { showSuccessMessage, showErrorMessage } from '@/utils/message';
+import { toast } from 'vue-sonner'; // or your preferred toast library
+// Composable
+import { useService } from '@/composables/useService';
+const { createService } = useService();
 
-//composable
-import { useUser } from '@/composables/useUser';
-const { createUser } = useUser();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'usuarios',
-        href: '/panel/users',
+        title: 'Servicios',
+        href: '/panel/services',
     },
     {
-        title: 'Exportar',
-        href: '/panel/users/export',
-    },
-    {
-        title: 'crear usuario',
-        href: '/panel/users/create',
+        title: 'Crear Servicio',
+        href: '/panel/services/create',
     },
 ];
 
@@ -114,19 +110,34 @@ const breadcrumbs: BreadcrumbItem[] = [
 const formSchema = toTypedSchema(
     z.object({
         name: z
-            .string({ message: 'campo obligatorio' })
-            .min(1, { message: 'nombre mayor a 2 letras' })
-            .max(50, { message: 'nombre menor a 50 letras' }),
-        email: z.string({ message: 'campo obligatorio' }).email({ message: 'correo invalido' }),
-        username: z
-            .string({ message: 'campo obligatorio' })
-            .min(2, { message: 'usuario mayor a 2 letras' })
-            .max(50, { message: 'usuario menor a 50 letras' }),
-        password: z
-            .string({ message: 'campo obligatorio' })
-            .min(8, { message: 'contraseña debe ser mayor de 8 digitos' })
-            .max(50, { message: 'contraseña menor a 50 digitos' }),
-        status: z.enum(['activo', 'inactivo'], { message: 'estado invalido' }),
+            .string({ message: 'Campo obligatorio' })
+            .min(2, { message: 'Nombre debe tener al menos 2 caracteres' })
+            .max(100, { message: 'Nombre debe tener menos de 100 caracteres' }),
+        cost: z
+            .number({ message: 'Costo es obligatorio' })
+            .min(0, { message: 'Costo no puede ser negativo' }),
+        ini_date: z
+            .string({ message: 'Fecha de inicio es obligatoria' })
+            .refine((dateString) => {
+                // Parse the date
+                const date = new Date(dateString);
+                
+                // Check if the date is valid
+                if (isNaN(date.getTime())) {
+                    return false;
+                }
+                
+                // Correct invalid dates (like 31/11/2025)
+                const originalYear = date.getFullYear();
+                const originalMonth = date.getMonth();
+                const originalDay = date.getDate();
+                
+                // If the date is adjusted, it means the original date was invalid
+                return originalYear === date.getFullYear() && 
+                       originalMonth === date.getMonth() && 
+                       originalDay === date.getDate();
+            }, { message: 'Fecha de inicio no válida' }),
+        state: z.enum(['activo', 'inactivo'], { message: 'Estado inválido' }),
     }),
 );
 
@@ -134,8 +145,18 @@ const formSchema = toTypedSchema(
 const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
+
 const onSubmit = handleSubmit((values) => {
-    createUser(values);
+    // Ensure cost is a number
+    const serviceData = {
+        ...values,
+        cost: Number(values.cost)
+    };
+    
+    createService(serviceData);
 });
+
+
 </script>
+
 <style scoped></style>
