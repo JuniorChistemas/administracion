@@ -6,6 +6,8 @@
                 <DialogDescription>Los datos están validados, llenar con precaución.</DialogDescription>
             </DialogHeader>
             <form @submit="onSubmit" class="flex flex-col gap-4 py-4">
+
+                <!-- Campo para editar la descripcion del descuento -->
                 <FormField v-slot="{ componentField }" name="description">
                     <FormItem>
                         <FormLabel>Descripción</FormLabel>
@@ -15,6 +17,8 @@
                         <FormMessage />
                     </FormItem>
                 </FormField>
+
+                <!-- Campo para editar el valor del descuento -->
                 <FormField v-slot="{ componentField }" name="percentage">
                     <FormItem>
                         <FormLabel>Porcentaje</FormLabel>
@@ -24,6 +28,8 @@
                         <FormMessage />
                     </FormItem>
                 </FormField>
+
+                <!-- Campo para editar el estado del descuento -->
                 <FormField v-slot="{ componentField }" name="state">
                     <FormItem>
                         <FormLabel>Estado</FormLabel>
@@ -64,7 +70,7 @@ import { useForm } from 'vee-validate';
 import { watch } from 'vue';
 import * as z from 'zod';
 
-import { DiscountResource, DiscountUpdateRequest } from '@/pages/panel/discount/interface/Discount';
+import { DiscountResource, DiscountUpdateRequest } from '../interface/Discount';
 
 const props = defineProps<{ modal: boolean; discountData: DiscountResource }>();
 const emit = defineEmits<{
@@ -77,7 +83,7 @@ const clouseModal = () => emit('emit-close', false);
 // Schema de validación
 const formSchema = toTypedSchema(
     z.object({
-        description: z.string().min(3, 'La descripción es requerida').max(255, 'La descripción no puede tener más de 255 caracteres'),
+        description: z.string().min(2, 'La descripción es requerida').max(255, 'La descripción no puede tener más de 255 caracteres'),
         percentage: z.number().min(0, 'El porcentaje no puede ser negativo').max(100, 'El porcentaje no puede ser mayor a 100'),
         state: z.enum(['activo', 'inactivo']),
     }),
@@ -107,8 +113,13 @@ watch(
 );
 
 const onSubmit = handleSubmit((values) => {
-    console.log('Formulario enviado con:', values);
-    emit('update-discount', values, props.discountData.id);
+    const updatedDiscount: DiscountUpdateRequest = {
+        description: values.description,
+        percentage: values.percentage,
+        state: values.state === 'activo' // ← ✅ Conversión a boolean
+    };
+
+    emit('update-discount', updatedDiscount, props.discountData.id);
     clouseModal();
 });
 </script>

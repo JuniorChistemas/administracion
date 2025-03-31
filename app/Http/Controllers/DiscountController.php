@@ -59,9 +59,8 @@ class DiscountController extends Controller
     public function store(StoreDiscountRequest $request)
      {
          Gate::authorize('create', Discount::class);
-         $validated = $request->validated();
-         $validated = $request->safe()->except(['state']);
-         $discount = Discount::create(Arr::except($validated, ['state']));
+         $validated = $request->validated(); // ya tiene state como boolean
+         $discount = Discount::create($validated);     
          return redirect()->route('panel.discounts.index')->with('message', 'Descuento creado correctamente'); 
      }
 

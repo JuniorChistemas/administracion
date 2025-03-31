@@ -6,6 +6,7 @@
       :sibling-count="1" 
       show-edges 
       :default-page="props.meta.current_page"
+      :key="props.meta.current_page"
       class="flex justify-center gap-2"
     >
       <PaginationList v-slot="{ items }" class="flex items-center gap-1">
@@ -31,9 +32,7 @@
     </Pagination>
   </template>
 <script setup lang="ts">
-import {
-  Button,
-} from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationEllipsis,

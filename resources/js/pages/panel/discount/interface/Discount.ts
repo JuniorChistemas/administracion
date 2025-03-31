@@ -8,9 +8,9 @@ export type DiscountResource = {
 };
 
 export type DiscountRequest = {
-    description: string;
-    percentage: number;
-    state: 'activo' | 'inactivo';
+  description: string;
+  percentage: number;
+  state: boolean; // ✅ Tipo correcto
 };
 
 export type showDiscountResponse = {
@@ -25,9 +25,9 @@ export type DiscountDeleteResponse = {
 };
 
 export type DiscountUpdateRequest = {
-    description: string;
-    percentage: number;
-    state: 'activo' | 'inactivo';
+  description: string;
+  percentage: number;
+  state: boolean; // ✅ Tipo correcto
 };
 export type DiscountResponse = {
   discounts: DiscountResource[];

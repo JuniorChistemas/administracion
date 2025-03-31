@@ -110,7 +110,7 @@ export const useDiscount = () => {
             console.error(error);
         }
     };
-    // delete supplier
+    // delete discount
     const deleteDiscount = async (id: number) => {
         try {
             const response = await DiscountServices.destroy(id);

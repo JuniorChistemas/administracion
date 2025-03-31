@@ -1,11 +1,12 @@
 <template>
-    <div class="container mx-auto py-6 px-0">
-           <Table class="w-full border border-gray-100 rounded-lg overflow-clip">
+    <div class="container mx-auto px-0 py-6">
+        <LoadingTable v-if="loading" :headers="5" :row-count="10" />
+        <Table v-else class="my-3 w-full overflow-clip rounded-lg border border-gray-100">
             <TableCaption>{{ discountPaginate.current_page }} de {{ discountPaginate.total }}</TableCaption>
             <TableHeader>
                    <TableRow>
                        <TableHead class="text-center">ID</TableHead>    
-                       <TableHead class="w-[200px]">Descripción</TableHead>
+                       <TableHead class="w-[250px]">Descripción</TableHead>
                        <TableHead class="text-left px-10">Porcentaje</TableHead>
                        <TableHead>Estado</TableHead>
                        <TableHead class="text-center">Acciones</TableHead>
@@ -38,7 +39,7 @@
 
 //import LoadingTable from '@/components/loadingTable.vue';
 import { Pagination } from '@/interface/paginacion';
-import { DiscountResource } from '@/pages/panel/discount/interface/Discount';
+import { DiscountResource } from '../interface/Discount';
 import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Button from '@/components/ui/button/Button.vue';
 import { usePage } from '@inertiajs/vue3';
@@ -68,7 +69,7 @@ onMounted(() => {
     }
 });
 
-const {discountList,discountPaginate} = defineProps<{
+const {discountList,discountPaginate,loading} = defineProps<{
    discountList: DiscountResource[];
    discountPaginate: Pagination;
    loading: boolean;
