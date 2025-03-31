@@ -31,7 +31,7 @@ class DiscountController extends Controller
         try {
             $description = $request->get('description');
             $discounts = Discount::when($description, function ($query, $description) {
-                return $query->where('description', 'like', "%$description%");
+                return $query->whereLike('description', "%$description%");
             })->orderBy('id','asc')->paginate(15);
             return response()->json([
                 'discounts'=> DiscountResource::collection($discounts),

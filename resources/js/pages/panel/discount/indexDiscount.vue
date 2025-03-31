@@ -3,6 +3,7 @@
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
+                <FilterDiscount @search="searchDiscount" />
                 <TableDiscount
                     :discount-list="principal.discountList"
                     :discount-paginate="principal.paginacion"
@@ -35,6 +36,7 @@ import TableDiscount from './components/tableDiscount.vue';
 import { DiscountUpdateRequest } from './interface/Discount';
 import DeleteDiscount from './components/deleteDiscount.vue';
 import EditDiscount from './components/editDiscount.vue';
+import FilterDiscount from './components/filterDiscount.vue';
 import { useDiscount } from '@/composables/useDiscount';
 import { BreadcrumbItem } from '@/types';
 
@@ -91,6 +93,10 @@ const openDeleteModal = (discountId: number) => {
 // delete discount
 const emitDeleteDiscount = (discountId: number) => {
     deleteDiscount(discountId);
+};
+// search user
+const searchDiscount = (text: string) => {
+    loadingDiscounts(1, text);
 };
 </script>
 <style lang="css" scoped></style>
