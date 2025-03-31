@@ -40,15 +40,21 @@ import { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
 {
-        title: 'crear proveedor',
+        title: 'Crear proveedor',
         href: '/panel/suppliers/create',
     },
     {
-        title: 'Exportar',
-        href: '/panel/suppliers/export',
+        title: 'Exportar a Excel',
+        href: '/panel/reports/export-excel-suppliers',
+        download: true,
     },
     {
-        title: 'proveedores',
+        title: 'Exportar a PDF',
+        href: '/panel/reports/export-pdf-suppliers',
+        download: true,
+    },
+    {
+        title: 'Proveedores',
         href: '/panel/suppliers',
     },
 ];
