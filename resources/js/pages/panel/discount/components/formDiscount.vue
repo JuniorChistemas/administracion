@@ -1,41 +1,38 @@
 <template>
-    <Head title="Nuevo Proveedor"></Head>
+    <Head title="Nuevo Descuento"></Head>
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Card class="mt-4 flex flex-col gap-4">
                 <CardHeader>
-                    <CardTitle>NUEVO PROVEEDOR</CardTitle>
-                    <CardDescription>Complete los campos para crear un nuevo proveedor</CardDescription>
+                    <CardTitle>NUEVO DESCUENTO</CardTitle>
+                    <CardDescription>Complete los campos para crear un nuevo descuento</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form @submit="onSubmit" class="flex flex-col gap-6">
-                        <FormField v-slot="{ componentField }" name="name">
+
+                        <!-- Campo para ingresar la descripcion del descuento -->
+                        <FormField v-slot="{ componentField }" name="description">
                             <FormItem>
-                                <FormLabel>Razón Social</FormLabel>
+                                <FormLabel>Descripción</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="nombre" v-bind="componentField" />
+                                    <Input type="text" placeholder="Descripcion" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="ruc">
+
+                        <!-- Campo para ingresar el valor del porcentaje del descuento -->
+                        <FormField v-slot="{ componentField }" name="percentage">
                             <FormItem>
-                                <FormLabel>Ruc</FormLabel>
+                                <FormLabel>Porcentaje</FormLabel>
                                 <FormControl>
-                                    <Input type="text" placeholder="10000000000" v-bind="componentField" />
+                                    <Input type="number" placeholder="porcentaje" step="0.01" v-bind="componentField" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField }" name="address">
-                            <FormItem>
-                                <FormLabel>Dirección</FormLabel>
-                                <FormControl>
-                                    <Input type="text" placeholder="Calle Los Cocos 145, Urb. Santa María del Pinar" v-bind="componentField" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
+
+                        <!-- Campo para ingresar el estado del descuento -->
                         <FormField v-slot="{ componentField }" name="state">
                             <FormItem>
                                 <FormLabel>Estado</FormLabel>
@@ -47,8 +44,8 @@
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Estado</SelectLabel>
-                                                <SelectItem value="activo"> activo </SelectItem>
-                                                <SelectItem value="inactivo"> inactivo </SelectItem>
+                                                <SelectItem value="activo">Activo</SelectItem>
+                                                <SelectItem value="inactivo">Inactivo</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -56,6 +53,8 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
+                        
+                        <!--BOTONES PARA ENVIAR Y BORRAR-->
                         <div class="container flex justify-end gap-4">
                             <Button type="submit" variant="default"> Enviar </Button>
                             <Button type="reset" variant="outline"> Borrar </Button>
@@ -67,6 +66,8 @@
     </AppLayout>
 </template>
 <script setup lang="ts">
+
+
 import Button from '@/components/ui/button/Button.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -82,41 +83,37 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
 
-//composable
-import { useSupplier } from '@/composables/useSupplier';
-const { createSupplier } = useSupplier();
+// composable
+import { useDiscount } from '@/composables/useDiscount';
+const { createDiscount } = useDiscount();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Proveedores',
-        href: '/panel/suppliers',
+        title: 'Descuentos',
+        href: '/panel/discounts',
     },
     {
         title: 'Exportar',
-        href: '/panel/suppliers/export',
+        href: '/panel/discounts/export',
     },
     {
-        title: 'Crear proveedor',
-        href: '/panel/suppliers/create',
+        title: 'Crear descuentos',
+        href: '/panel/discounts/create',
     },
 ];
 
 // Form validation
 const formSchema = toTypedSchema(
     z.object({
-        name: z
+        description: z
             .string({ message: 'campo obligatorio' })
-            .min(1, { message: 'nombre mayor a 5 letras' })
-            .max(50, { message: 'nombre menor a 50 letras' }),
-        ruc: z
-            .string({ message: 'Campo obligatorio' })
-            .length(11, { message: 'El RUC debe tener 11 dígitos' })
-            .regex(/^\d+$/, { message: 'El RUC solo debe contener números' }),
-        address: z
-            .string({ message: 'campo obligatorio' })
-            .min(2, { message: 'dirección mayor a 5 letras' })
-            .max(50, { message:'direccion menor a 50 letras' }),
-        state: z.enum(['activo', 'inactivo'], { message: 'estado invalido' }),
+            .min(2, { message: 'La descripción debe tener al menos 2 caracteres' })
+            .max(255, { message: 'La descripción debe ser menor a 255 caracteres' }),
+        percentage: z
+            .number({ message: 'Campo obligatorio' })
+            .min(0, { message: 'El porcentaje debe ser al menos 0' })
+            .max(100, { message: 'El porcentaje no puede superar 100' }),
+        state: z.enum(['activo', 'inactivo'], { message: 'estado inválido' }),
     }),
 );
 
@@ -125,8 +122,13 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema,
 });
 const onSubmit = handleSubmit((values) => {
-    console.log('hola')
-    createSupplier(values);
+    const discountData = {
+        description: values.description,
+        percentage: Number(values.percentage),
+        state: values.state === 'activo' // ✅ convierte string a boolean
+    };
+
+    createDiscount(discountData);
 });
 </script>
 <style scoped></style>

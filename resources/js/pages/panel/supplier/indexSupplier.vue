@@ -3,6 +3,7 @@
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
+                <FilterSupplier @search="searchSupplier" />
                 <TableSupplier
                     :supplier-list="principal.supplierList"
                     :supplier-paginate="principal.paginacion"
@@ -37,6 +38,7 @@ import DeleteSupplier from './components/deleteSupplier.vue';
 import EditSupplier from './components/editSupplier.vue';
 import { useSupplier } from '@/composables/useSupplier';
 import { BreadcrumbItem } from '@/types';
+import FilterSupplier from './components/filterSupplier.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 {
@@ -97,6 +99,10 @@ const openDeleteModal = (supplierId: number) => {
 // delete supplier
 const emitDeleteSupplier = (supplierId: number) => {
     deleteSupplier(supplierId);
+};
+// search supplier
+const searchSupplier = (text: string) => {
+    loadingSuppliers(1, text);
 };
 </script>
 <style lang="css" scoped></style>

@@ -8,6 +8,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Reportes\ServicePDFController;
 use App\Http\Controllers\Reportes\SupplierPDFController;
 use App\Http\Controllers\Reportes\UserPDFController;
+use App\Http\Controllers\DiscountController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -40,7 +41,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('clientTypes', ClientTypeController::class);
         # list Client Types
             Route::get('listar-clientTypes',[ClientTypeController::class,'listarClientTypes'])->name('clientTypes.listar');
-        
+        # module Discount
+            Route::resource('discounts', DiscountController::class);
+        # list Discount
+            Route::get('listar-discounts',[DiscountController::class,'listarDiscounts'])->name('discounts.listar');
+      
+      
         # Route group for reports
         Route::prefix('reports')->name('reports.')->group(function () {
             # Exports to Excel
