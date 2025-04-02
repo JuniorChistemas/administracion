@@ -3,7 +3,7 @@
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <FilterUser @search="searchCustomer" />
+                <FilterCustomer @search="searchCustomer" />
                 <TableCustomer
                     :customer-list="principal.customerList"
                     :customer-paginate="principal.paginacion"
@@ -34,7 +34,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
-import FilterUser from '../user/components/filterUser.vue';
+import FilterCustomer from '../../../components/filter.vue';
 import DeleteCustomer from './components/deleteCustomer.vue';
 import EditCustomer from './components/editCustomer.vue';
 import TableCustomer from './components/tableCustomer.vue';

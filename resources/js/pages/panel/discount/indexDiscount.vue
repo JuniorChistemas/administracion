@@ -36,7 +36,7 @@ import TableDiscount from './components/tableDiscount.vue';
 import { DiscountUpdateRequest } from './interface/Discount';
 import DeleteDiscount from './components/deleteDiscount.vue';
 import EditDiscount from './components/editDiscount.vue';
-import FilterDiscount from './components/filterDiscount.vue';
+import FilterDiscount from '../../../components/filter.vue';
 import { useDiscount } from '@/composables/useDiscount';
 import { BreadcrumbItem } from '@/types';
 

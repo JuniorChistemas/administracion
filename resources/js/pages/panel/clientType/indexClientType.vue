@@ -3,6 +3,7 @@
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
+                <FilterClientType @search="searchClientType" />
                 <TableClientType 
                     :client-type-list="principal.clientTypeList"
                     :client-type-paginate="principal.paginacion"
@@ -37,6 +38,7 @@ import DeleteClientType from './components/deleteClientType.vue';
 import { onMounted } from 'vue';
 import { ClientTypeUpdateRequest } from './interface/ClientType';
 import EditClientType from './components/editClientType.vue';
+import FilterClientType from '../../../components/filter.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
 {
@@ -101,6 +103,11 @@ const openDeleteModal = (clientTypeid: number) => {
 // delete clientType
 const emitDeleteClientType = (clientTypeId: number) => {
     deleteClientType(clientTypeId);
+};
+
+// search Service
+const searchClientType = (text: string) => {
+    loadingClientTypes(1, text);
 };
 </script>
 <style lang="css" scoped></style>

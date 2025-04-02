@@ -36,7 +36,7 @@ import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import DeleteUser from './components/deleteUser.vue';
 import EditUser from './components/editUser.vue';
-import FilterUser from './components/filterUser.vue';
+import FilterUser from '../../../components/filter.vue';
 import TableUser from './components/tableUser.vue';
 import { UserUpdateRequest } from './interface/User';
 
