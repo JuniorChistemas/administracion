@@ -20,9 +20,11 @@
                 />
                 <DeleteCustomer
                     :modal="principal.statusModal.delete"
-                    :user-id="principal.idCustomer"
+                    :itemId="principal.idCustomer"
+                    title="Eliminar Servicio"
+                    description="¿Está seguro de que desea eliminar este servicio?"
                     @close-modal="closeModalDelete"
-                    @delete-customer="emitDeleteCustomer"
+                    @delete-item="emitDeleteCustomer"
                 />
             </div>
         </div>
@@ -35,7 +37,7 @@ import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import FilterCustomer from '../../../components/filter.vue';
-import DeleteCustomer from './components/deleteCustomer.vue';
+import DeleteCustomer from '../../../components/delete.vue';
 import EditCustomer from './components/editCustomer.vue';
 import TableCustomer from './components/tableCustomer.vue';
 import { CustomerRequestUpdate } from './interface/Customer';
@@ -91,8 +93,8 @@ const openDeleteModal = (id: number) => {
     principal.idCustomer = id;
 };
 
-const emitDeleteCustomer = (id: number) => {
-    deleteCustomer(id);
+const emitDeleteCustomer = (id: number | string) => {
+    deleteCustomer(Number(id));
 };
 const searchCustomer = (text: string) => {
     loadingCustomers(1, text);

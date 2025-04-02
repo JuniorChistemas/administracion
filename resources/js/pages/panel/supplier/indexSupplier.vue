@@ -20,9 +20,11 @@
                 />
                 <DeleteSupplier
                     :modal="principal.stateModal.delete"
-                    :supplier-id="principal.idSupplier"
+                    :itemId="principal.idSupplier"
+                    title="Eliminar Servicio"
+                    description="¿Está seguro de que desea eliminar este servicio?"
                     @close-modal="closeModalDelete"
-                    @delete-supplier="emitDeleteSupplier"
+                    @delete-item="emitDeleteSupplier"
                 />
             </div>
         </div>
@@ -34,7 +36,7 @@ import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import TableSupplier from './components/tableSupplier.vue';
 import { SupplierUpdateRequest } from './interface/Supplier';
-import DeleteSupplier from './components/deleteSupplier.vue';
+import DeleteSupplier from '../../../components/delete.vue';
 import EditSupplier from './components/editSupplier.vue';
 import { useSupplier } from '@/composables/useSupplier';
 import { BreadcrumbItem } from '@/types';
@@ -97,8 +99,8 @@ const openDeleteModal = (supplierId: number) => {
     console.log('Eliminar proveedor con ID:', supplierId);
 };
 // delete supplier
-const emitDeleteSupplier = (supplierId: number) => {
-    deleteSupplier(supplierId);
+const emitDeleteSupplier = (supplierId: number | string) => {
+    deleteSupplier(Number(supplierId));
 };
 // search supplier
 const searchSupplier = (text: string) => {

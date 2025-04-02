@@ -20,9 +20,11 @@
                 />
                 <DeleteClientType
                     :modal="principal.stateModal.delete"
-                    :client-type-id="principal.idClientType"
+                    :itemId="principal.idClientType"
+                    title="Eliminar Servicio"
+                    description="¿Está seguro de que desea eliminar este servicio?"
                     @close-modal="closeModalDelete"
-                    @delete-client-type="emitDeleteClientType"
+                    @delete-item="emitDeleteClientType"
                 />
             </div>
         </div>
@@ -34,7 +36,7 @@ import { Head } from '@inertiajs/vue3';
 import { BreadcrumbItem } from '@/types';
 import { useClientType } from '@/composables/useClientType';
 import TableClientType from './components/tableClientType.vue';
-import DeleteClientType from './components/deleteClientType.vue';
+import DeleteClientType from '../../../components/delete.vue';
 import { onMounted } from 'vue';
 import { ClientTypeUpdateRequest } from './interface/ClientType';
 import EditClientType from './components/editClientType.vue';
@@ -101,8 +103,8 @@ const openDeleteModal = (clientTypeid: number) => {
 };
 
 // delete clientType
-const emitDeleteClientType = (clientTypeId: number) => {
-    deleteClientType(clientTypeId);
+const emitDeleteClientType = (clientTypeId: number | string) => {
+    deleteClientType(Number(clientTypeId));
 };
 
 // search Service
