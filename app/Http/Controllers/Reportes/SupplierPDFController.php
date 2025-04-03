@@ -9,9 +9,9 @@ use TCPDF;
 
 class SupplierPDFController extends Controller
 {
-    public function exportPdf()
+    public function exportPDF()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::orderBy('id', 'asc')->get();
 
         $suppliersArray = $suppliers->map(function ($supplier) {
             return [
@@ -36,6 +36,9 @@ class SupplierPDFController extends Controller
         // Eliminar la línea de encabezado (borde superior)
         $pdf->SetHeaderData('', 0, '', '', [0, 0, 0], [255, 255, 255]);
 
+        // Personalizar el pie de página (eliminar línea predeterminada)
+        $pdf->setFooterData(array(0,0,0), array(255,255,255));
+        
         $pdf->AddPage();
 
         // Encabezado del PDF
@@ -71,7 +74,7 @@ class SupplierPDFController extends Controller
                 $pdf->Ln();
             }
             $pdf->SetFont('helvetica', '', 10);
-            $pdf->MultiCell($widths[0], 10, ' ' . $supplier['id'] . ' ', 1, 'C', 0, 0);
+            $pdf->MultiCell($widths[0], 10, $supplier['id'], 1, 'C', 0, 0);
             $pdf->MultiCell($widths[1], 10, $supplier['name'], 1, 'C', 0, 0);
             $pdf->MultiCell($widths[2], 10, $supplier['ruc'], 1, 'C', 0, 0);
             $pdf->MultiCell($widths[3], 10, $supplier['address'], 1, 'C', 0, 0);
