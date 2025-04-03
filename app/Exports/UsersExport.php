@@ -17,7 +17,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, WithStyl
     */
     public function collection()
     {
-        return User::all();
+        return User::orderBy('id', 'asc')->get();
     }
 
     public function map($user): array
