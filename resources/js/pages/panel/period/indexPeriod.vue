@@ -12,6 +12,7 @@
                     :period-paginate="principal.paginacion"
                     @page-change="handlePageChange"
                     @open-modal="getIdPeriod"
+                    @open-modal-delete="openDeleteModal"
                     :loading="principal.loading"
                 />
                 <editPeriod 

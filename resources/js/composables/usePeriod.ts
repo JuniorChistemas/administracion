@@ -137,6 +137,7 @@ export const usePeriod = () => {
         loadingPeriods,
         createPeriod,
         getPeriodById,
+        resetPeriodData,
         updatePeriod,
         deletePeriod,
     }
