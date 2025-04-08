@@ -44,6 +44,11 @@ const mainNavItems: NavItem[] = [
         href: '/panel/customers',
         icon: Car,
     },
+    {
+        title: 'Periodo',
+        href: '/panel/periods',
+        icon: Tag,
+    }
 ];
 
 const mainNavItems2: NavItem[] = [

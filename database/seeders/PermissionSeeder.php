@@ -56,5 +56,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'editar categorias']);
         Permission::create(['name' => 'eliminar categorias']);
         Permission::create(['name' => 'ver categorias']);
+
+        // model periods
+        Permission::create(['name' => 'crear periodos']);
+        Permission::create(['name' => 'editar periodos']);
+        Permission::create(['name' => 'eliminar periodos']);
+        Permission::create(['name' => 'ver periodos']);
     }
 }
