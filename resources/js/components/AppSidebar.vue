@@ -67,7 +67,8 @@ const mainNavItems3: NavItem[] = [
         href: '/panel/amounts',
         icon: BanknoteIcon,
     },
- ];
+];
+
 
 
 const mainNavItems2: NavItem[] = [
