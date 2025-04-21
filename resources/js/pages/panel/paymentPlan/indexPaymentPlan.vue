@@ -4,8 +4,7 @@
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
                 <div class="flex justify-between items-center mb-4 px-6 mt-4">
-                    <ToolsPaymentPlan />
-                    <FilterPaymentPlan />
+                    <FilterPaymentPlan @search="searchPaymentPlan" />
                 </div>
                 <TablePaymentPlan
                     :payment-plan-list="principal.paymentPlanList"
@@ -45,7 +44,6 @@ import TablePaymentPlan from './components/tablePaymentPlan.vue';
 import FilterPaymentPlan from '../../../components/filter.vue';
 import DeletePaymentPlan from '../../../components/delete.vue';
 import EditPaymentPlan from './components/editPaymentPlan.vue';
-import ToolsPaymentPlan from './components/toolsPaymentPlan.vue';
 import { PaymentPlanRequestUpdate } from './interface/PaymentPlan';
 import { usePaymentPlan } from '@/composables/usePaymentPlan';
 
@@ -93,7 +91,7 @@ const openDeleteModal = (id: number) => {
 const emitDeletePaymentPlan = (id: number | string) => {
     deletePaymentPlan(Number(id));
 };
-const searchCustomer = (text: string) => {
+const searchPaymentPlan = (text: string) => {
     loadingPaymentPlan(1, text);
 };
 </script>
