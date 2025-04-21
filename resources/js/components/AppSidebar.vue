@@ -47,7 +47,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Periodo',
         href: '/panel/periods',
-        icon: Tag,
+        icon: LayoutGrid,
     },
     {
         title: 'Plan de pagos',
@@ -60,10 +60,10 @@ const mainNavItems: NavItem[] = [
         icon: Tag,
     },
     {
-        title: 'Periodo',
-        href: '/panel/periods',
-        icon: Tag,
-    }
+        title: 'Usuarios',
+        href: '/panel/users',
+        icon: UserSquare,
+    },
 ];
 
 const mainNavItems2: NavItem[] = [
