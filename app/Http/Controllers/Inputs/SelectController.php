@@ -41,17 +41,17 @@ class SelectController extends Controller
     public function getServiceList()
     {
         $services = Service::select('id', 'name')
-            ->where('state', 1)
             ->orderBy('id')
             ->get();
+
         return response()->json($services);
     }
+
 
     // get period list
     public function getPeriodList()
     {
         $periods = Period::select('id', 'name')
-            ->where('state', 1)
             ->orderBy('id')
             ->get();
         return response()->json($periods);

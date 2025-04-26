@@ -107,14 +107,12 @@ export const usePaymentPlan = () => {
                 principal.paymentPlanData = response.paymentPlan;
                 console.log(principal.paymentPlanData.payment_type);
                 principal.idPaymentPlan = response.paymentPlan.id;
-                if(principal.paymentPlanList.length === 0){
-                    const [periodResponse, serviceResponse] = await Promise.all([
-                        PaymentPlanServices.getPeriod(),
-                        PaymentPlanServices.getService(),
-                      ]);
-                    principal.periodList = periodResponse.data;
-                    principal.serviceList = serviceResponse.data;
-                }
+                const [periodResponse, serviceResponse] = await Promise.all([
+                    PaymentPlanServices.getPeriod(),
+                    PaymentPlanServices.getService(),
+                ]);
+                principal.periodList = periodResponse.data;
+                principal.serviceList = serviceResponse.data;                
                 principal.stateModal.update = true;
             }
         } catch (error) {
