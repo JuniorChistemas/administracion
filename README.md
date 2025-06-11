@@ -46,7 +46,7 @@ This is a Laravel 12 project. Follow the steps below to set up and run the proje
 
     ```
      DB_CONNECTION=pgsql
-     DB_HOST=postgres
+     DB_HOST=127.0.0.1
      DB_PORT=5432
      DB_DATABASE=DATABASE
      DB_USERNAME=USER
