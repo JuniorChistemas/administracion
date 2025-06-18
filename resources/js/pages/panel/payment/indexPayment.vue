@@ -49,8 +49,8 @@
                 <Delete
                     :modal="principal.statusModal.delete"
                     :itemId="principal.idAmount"
-                    title="Eliminar egreso"
-                    description="¿Está seguro de que desea eliminar este egreso?"
+                    title="Eliminar ingreso"
+                    description="¿Está seguro de que desea eliminar este ingreso?"
                     @close-modal="closeModalDelete"
                     @delete-item="emitDeleteAmount"
                 /> -->

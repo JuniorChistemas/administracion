@@ -22,6 +22,7 @@ import {
     Truck,
     User,
     UserSquare,
+    ListCheck
 } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
@@ -94,6 +95,11 @@ const mainNavItems6: NavItem[] = [
         href: '/panel/payments',
         icon: HandCoins,
     },
+    {
+        title: 'Lista de comprobantes',
+        href: '/panel/invoices',
+        icon: ListCheck,
+    }
 ];
 
 const mainNavItems2: NavItem[] = [
