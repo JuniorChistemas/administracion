@@ -74,10 +74,6 @@ const { loadingPayments, showPayment, principal, showPaymentData, updatePaymentF
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Nuevo pago',
-        href: '/panel/payments/create',
-    },
-    {
         title: 'Pagos',
         href: '/panel/payments',
     },

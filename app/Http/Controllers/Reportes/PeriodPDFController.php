@@ -3,36 +3,30 @@
 namespace App\Http\Controllers\Reportes;
 
 use App\Http\Controllers\Controller;
-use App\Models\Service;
+use App\Models\Period;
 use Illuminate\Http\Request;
 use TCPDF;
 
-class ServicePDFController extends Controller
+class PeriodPDFController extends Controller
 {
     public function exportPDF()
     {
-        $services = Service::orderBy('id', 'asc')->get();
+        $periods = Period::orderBy('id', 'asc')->get();
 
-        $servicesArray = $services->map(function ($service) {
+        $periodsArray = $periods->map(function ($period) {
             return [
-                'id' => $service->id,
-                'name' => $service->name,
-                'cost' => $service->cost,
-                'ini_date' => date('d-m-Y', strtotime($service->ini_date)),
-                'state' => match ($service->state) {
-                'activo' => 'Activo',
-                'pendiente' => 'Pendiente',
-                'inactivo' => 'Inactivo',
-                default => 'Activo' // valor por defecto si no coincide con ninguno
-},
+                'id' => $period->id,
+                'name' => $period->name,
+                'description' => $period->description,
+                'state' => $period->state ? 'Activo' : 'Inactivo'
             ];
         })->toArray();
 
         $pdf = new TCPDF();
         $pdf->SetCreator('Laravel TCPDF');
         $pdf->SetAuthor('Laravel');
-        $pdf->SetTitle('Lista de Servicios');
-        $pdf->SetSubject('Reporte de Servicios');
+        $pdf->SetTitle('Lista de Periodos');
+        $pdf->SetSubject('Reporte de Periodos');
 
         // Configuración de márgenes
         $pdf->SetMargins(10, 10, 10);
@@ -56,8 +50,8 @@ class ServicePDFController extends Controller
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetFillColor(242, 242, 242); 
 
-        $header = ['ID', 'Nombre', 'Costo', 'Fecha de Inicio', 'Estado'];
-        $widths = [10, 60, 40, 40, 40];
+        $header = ['ID', 'Nombre', 'Descripción','Estado'];
+        $widths = [10, 40, 40, 40];
 
         foreach ($header as $i => $col) {
             $pdf->MultiCell($widths[$i], 10, $col, 1, 'C', 1, 0);
@@ -67,7 +61,7 @@ class ServicePDFController extends Controller
         $pdf->SetFont('helvetica', '', 10);
 
         // Imprimir los datos de cada servicio
-        foreach ($servicesArray as $service) {
+        foreach ($periodsArray as $period) {
             if ($pdf->GetY() > 260) { // Si la posición Y está cerca del final de la página
                 $pdf->AddPage(); // Añadir una nueva página
                 // Imprimir los encabezados nuevamente en la nueva página
@@ -80,11 +74,10 @@ class ServicePDFController extends Controller
             }
             $pdf->SetFont('helvetica', '', 10);
 
-            $pdf->MultiCell($widths[0], 10, $service['id'], 1, 'C', 0, 0);
-            $pdf->MultiCell($widths[1], 10, $service['name'], 1, 'C', 0, 0);
-            $pdf->MultiCell($widths[2], 10, 'S/ ' . number_format($service['cost'], 2), 1, 'C', 0, 0);            
-            $pdf->MultiCell($widths[3], 10, $service['ini_date'], 1, 'C', 0, 0);
-            $pdf->MultiCell($widths[4], 10, $service['state'], 1, 'C', 0, 0);
+            $pdf->MultiCell($widths[0], 10, $period['id'], 1, 'C', 0, 0);
+            $pdf->MultiCell($widths[1], 10, $period['name'], 1, 'C', 0, 0);
+            $pdf->MultiCell($widths[2], 10, $period['description'], 1, 'C', 0, 0);
+            $pdf->MultiCell($widths[3], 10, $period['state'], 1, 'C', 0, 0);
             $pdf->Ln();
         }
 
@@ -94,9 +87,9 @@ class ServicePDFController extends Controller
         }
         
         // Generamos el PDF como string en memoria
-        $pdfOutput = $pdf->Output('servicios.pdf', 'S'); // "S" = string, no lo imprime directo
+        $pdfOutput = $pdf->Output('periodos.pdf', 'S'); // "S" = string, no lo imprime directo
         
         // Laravel se encarga del response
-        return response($pdfOutput)->header('Content-Type', 'application/pdf')->header('Content-Disposition', 'attachment; filename="servicios.pdf"');
+        return response($pdfOutput)->header('Content-Type', 'application/pdf')->header('Content-Disposition', 'attachment; filename="periodos.pdf"');
     }
 }

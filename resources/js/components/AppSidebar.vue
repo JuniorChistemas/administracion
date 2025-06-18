@@ -20,6 +20,7 @@ import {
     Settings2,
     Shield,
     Truck,
+    User,
     UserSquare,
 } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
@@ -97,103 +98,27 @@ const mainNavItems6: NavItem[] = [
 
 const mainNavItems2: NavItem[] = [
     {
-        title: 'Seguridad',
+        title: 'Personal',
         href: '#',
-        icon: Shield,
+        icon: User,
         items: [
             {
                 title: 'Usuarios',
                 href: '/panel/users',
             },
-            {
-                title: 'Roles',
-                href: '#',
-            },
-            {
-                title: 'Permisos',
-                href: '#',
-            },
+            //{
+              //  title: 'Roles',
+                //href: '#',
+            //},
+            //{
+              //  title: 'Permisos',
+                //href: '#',
+            //},
         ],
     },
-    {
-        title: 'Models',
-        href: '#',
-        icon: Map,
-        items: [
-            {
-                title: 'Genesis',
-                href: '#',
-            },
-            {
-                title: 'Explorer',
-                href: '#',
-            },
-            {
-                title: 'Quantum',
-                href: '#',
-            },
-        ],
-    },
-    {
-        title: 'Documentation',
-        href: '#',
-        icon: BookOpen,
-        items: [
-            {
-                title: 'Introduction',
-                href: '#',
-            },
-            {
-                title: 'Get Started',
-                href: '#',
-            },
-            {
-                title: 'Tutorials',
-                href: '#',
-            },
-            {
-                title: 'Changelog',
-                href: '#',
-            },
-        ],
-    },
-    {
-        title: 'Configuraciones',
-        href: '#',
-        icon: Settings2,
-        items: [
-            {
-                title: 'General',
-                href: '/settings/profile',
-            },
-            {
-                title: 'Team',
-                href: '#',
-            },
-            {
-                title: 'Billing',
-                href: '#',
-            },
-            {
-                title: 'Limits',
-                href: '#',
-            },
-        ],
-    },
+    
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
-];
 </script>
 
 <template>

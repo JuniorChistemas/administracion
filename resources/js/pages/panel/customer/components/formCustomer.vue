@@ -59,6 +59,26 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
+                <FormField v-slot="{ componentField }" name="state">
+                    <FormItem>
+                        <FormLabel>Estado</FormLabel>
+                        <FormControl>
+                            <Select v-bind="componentField" disabled>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona el estado" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Estado</SelectLabel>
+                                        <SelectItem value="activo">Activo</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
+
                         <Button type="submit">Crear Cliente</Button>
                     </form>
                 </CardContent>
@@ -122,16 +142,28 @@ const formShema = toTypedSchema(
             .min(1, { message: 'codigo mayor a 2 letras' })
             .max(50, { message: 'codigo menor a 50 letras' }),
         client_type_id: z.number({ message: 'campo obligatorio' }),
+        state: z.enum(['activo', 'inactivo'], { message: 'Estado inválido' }),
+
     }),
 );
 
 const { handleSubmit } = useForm({
     validationSchema: formShema,
+        initialValues: {         
+        state: 'activo',     
+    },
 });
 
+
 const onSubmit = handleSubmit((values) => {
-    console.log(values);
-    createCustomer(values);
+    const customerData = {
+        name: values.name,
+        codigo: values.codigo,
+        client_type_id: values.client_type_id,
+        state: values.state === 'activo',
+    };
+
+    createCustomer(customerData);
 });
 </script>
 <style scoped></style>

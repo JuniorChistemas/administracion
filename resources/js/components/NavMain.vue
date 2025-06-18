@@ -98,7 +98,7 @@ const isMenuActivo = (item: NavItem) => {
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarMenu> 
-        <SidebarGroupLabel>Seguridad</SidebarGroupLabel>
+        <SidebarGroupLabel>Acceso</SidebarGroupLabel>
         <SidebarMenu>
             <Collapsible v-for="item in items2" :key="item.title" as-child :default-open="isMenuActivo(item) || item.isActive"  class="group/collapsible" >
                 <SidebarMenuItem>

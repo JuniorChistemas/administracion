@@ -14,23 +14,24 @@ export type CustomerRequest = {
     name: string;
     codigo: string;
     client_type_id: number;
+    state: boolean;
 };
 
 export type CustomerRequestUpdate = {
     name: string;
     codigo: string;
     client_type_id: number;
-    state: 'activo' | 'inactivo';
+    state: boolean;
 };
 
 export type showCustomerResponse = {
-    status: boolean;
+    state: boolean;
     message: string;
     customer: CustomerResource;
 };
 
 export type CustomerDeleteResponse = {
-    status: boolean;
+    state: boolean;
     message: string;
 };
 

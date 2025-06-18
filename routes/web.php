@@ -20,6 +20,7 @@ use App\Http\Controllers\Panel\PaymentController;
 use App\Http\Controllers\PaymentPlanController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\Reportes\CustomerPDFController;
+use App\Http\Controllers\Reportes\PeriodPDFController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -99,7 +100,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/export-pdf-clientTypes', [ClientTypePDFController::class, 'exportPDF']);
             Route::get('/export-pdf-categories', [CategoryPDFController::class, 'exportPDF']);
             Route::get('/export-pdf-customers', [CustomerPDFController::class, 'exportPDF']);
-            Route::get('/export-pdf-periods', [PeriodController::class, 'exportPDF']);
+            Route::get('/export-pdf-periods', [PeriodPDFController::class, 'exportPDF']);
             Route::get('/export-pdf-amounts', [AmountPDFController::class, 'exportPDF']);
 
             #Excel imports

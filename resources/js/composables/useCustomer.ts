@@ -97,7 +97,7 @@ export const useCustomer = () => {
                 return;
             }
             const response = await CustomerServices.show(id);
-            if (response.status) {
+            if (response.state) {
                 principal.customerData = response.customer;
                 console.log(principal.customerData.name);
                 principal.idCustomer = response.customer.id;
@@ -117,7 +117,7 @@ export const useCustomer = () => {
     const updateCustomer = async (id: number, data: CustomerRequestUpdate) => {
         try {
             const response = await CustomerServices.update(id, data);
-            if (response.status) {
+            if (response.state) {
                 showSuccessMessage('Cliente actualizado', response.message);
                 principal.statusModal.update = false;
                 loadingCustomers(principal.paginacion.current_page, principal.filter);
@@ -133,7 +133,7 @@ export const useCustomer = () => {
     const deleteCustomer = async (id: number) => {
         try {
             const response = await CustomerServices.destroy(id);
-            if (response.status) {
+            if (response.state) {
                 showSuccessMessage('Cliente eliminado', 'El cliente se eliminó correctamente');
                 principal.statusModal.delete = false;
                 loadingCustomers(principal.paginacion.current_page, principal.filter);
