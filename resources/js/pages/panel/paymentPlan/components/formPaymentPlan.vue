@@ -53,6 +53,28 @@
                             </FormItem>
                         </FormField>
 
+                                                <!-- Seleccionar el Cliente -->
+                        <FormField v-if="props.paymentPlanCustomer" v-slot="{ componentField }" name="customer_id">
+                            <FormItem>
+                                <FormLabel>Cliente</FormLabel>
+                                <FormControl>
+                                    <Select v-bind="componentField">
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecciona el cliente"/>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Cliente</SelectLabel>
+                                                <SelectItem v-for="customer in props.paymentPlanCustomer" :key="customer.id" :value="customer.id">
+                                                    {{ customer.name }}
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                            </FormItem>
+                        </FormField>
+
                         <!-- Seleccionar el periodo -->
                         <FormField v-if="props.paymentPlanPeriod" v-slot="{ componentField }" name="period_id">
                             <FormItem>
@@ -130,14 +152,14 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { AlertCircle } from 'lucide-vue-next';
 import { useForm } from 'vee-validate';
 import { computed } from 'vue';
-import { z } from 'zod';
+import { custom, z } from 'zod';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { InputService, InputPeriod } from '@/interface/Inputs';
+import { InputService, InputPeriod, InputCustomer } from '@/interface/Inputs';
 import { usePaymentPlan } from '@/composables/usePaymentPlan';
 
 const { createPaymentPlan } = usePaymentPlan();
@@ -146,6 +168,7 @@ const page = usePage<SharedData>();
 const props = defineProps<{
     paymentPlanService: InputService[];
     paymentPlanPeriod: InputPeriod[];
+    paymentPlanCustomer: InputCustomer[];
 }>();
 
 const hasErrors = computed(() => {
@@ -166,6 +189,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 const formShema = toTypedSchema(
     z.object({
         service_id: z
+            .number({message: 'Campo obligatorio'}),
+        customer_id: z
             .number({message: 'Campo obligatorio'}),
         period_id: z
             .number({message: 'Campo obligatorio'}),

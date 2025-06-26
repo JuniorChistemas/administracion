@@ -146,7 +146,7 @@ class PaymentDocumentService
                 'document_number' => $documentNumber,
                 'result' => $result,
             ]);
-            return $documentData;
+            return $result;
         } catch (\Exception $e) {
             Log::error('GenerateComprobante exception', [
                 'error' => $e->getMessage(),

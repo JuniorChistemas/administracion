@@ -66,6 +66,8 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
+import axios from 'axios';
+import { toast } from '@/components/ui/toast'; 
 import EditPayment from './components/editPayment.vue';
 import TablePayment from './components/tablePayment.vue';
 import { updatePayment } from './interface/Payment';
@@ -111,10 +113,26 @@ const clouseModalDelete = () => {
 };
 
 // get data from editPayment
-const dataUpdatePayment = (data: updatePayment, id: number) => {
-    console.log('dataUpdatePayment', data);
-    updatePaymentF(data, id);
-    console.log('id', id);
+const dataUpdatePayment = async (data: updatePayment, id: number) => {
+    try {
+        const response = await updatePaymentF(data, id);
+        console.log('dataUpdatePayment', response);
+
+        toast({
+            title: 'Pago actualizado',
+            description: 'El pago se actualizó correctamente',
+        });
+    } catch (error: unknown) {
+        let message = 'Error al actualizar el pago';
+        if (axios.isAxiosError(error)) {
+            message = error.response?.data?.message || message;
+        }
+
+        toast({
+            title: 'Error',
+            description: message,
+        });
+    }
 };
 
 onMounted(() => {

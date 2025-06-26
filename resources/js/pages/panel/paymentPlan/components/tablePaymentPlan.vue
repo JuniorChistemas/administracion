@@ -31,6 +31,7 @@
         </span>
     </div>
 </TableHead>
+                            <TableHead class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">CLIENTE</TableHead>
                             <TableHead class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">PERIODO</TableHead>
                             <TableHead class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">TIPO DE PAGO</TableHead>
                             <TableHead class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">MONTO</TableHead>
@@ -43,6 +44,7 @@
                         <TableRow v-for="paymentPlan in paymentPlanList" :key="paymentPlan.id" class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30">
                             <TableCell class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ paymentPlan.id }}</TableCell>
                             <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.service_name }}</TableCell>
+                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.customer_name }}</TableCell>
                             <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.period_name }}</TableCell>
                             <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.payment_type ? 'Anual' : 'Mensual' }}</TableCell>
                             <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.amount }}</TableCell>

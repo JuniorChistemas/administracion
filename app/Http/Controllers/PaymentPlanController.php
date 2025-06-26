@@ -8,6 +8,8 @@ use App\Http\Requests\UpdatePaymentPlanRequest;
 use App\Http\Resources\PaymentPlanResource;
 use App\Models\Period;
 use App\Models\Service;
+use App\Models\Customer;
+use App\Jobs\SendNotificationPayJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -28,7 +30,7 @@ class PaymentPlanController extends Controller
         Gate::authorize('viewAny', PaymentPlan::class);
         try {
             $name = $request->get('name');
-            $paymentPlans = PaymentPlan::with('service', 'period')->when($name, function ($query, $name) {
+            $paymentPlans = PaymentPlan::with('service', 'period', 'customer')->when($name, function ($query, $name) {
                 return $query->whereHas('service', function ($q) use ($name) {
                     $q->where('name', 'LIKE', "%$name%");
                 });
@@ -57,7 +59,7 @@ class PaymentPlanController extends Controller
     public function create()
     {
         $services = Service::select('id', 'name')
-            ->where('state', 'activo')
+            ->where('state', 1)
             ->orderBy('id')
             ->get();
 
@@ -65,10 +67,17 @@ class PaymentPlanController extends Controller
             ->where('state', 1)
             ->orderBy('id')
             ->get();
+        
+        $customers = Customer::select('id', 'name')
+        ->where('state', 1)
+        ->orderBy('id')
+        ->get();
+
 
         return Inertia::render('panel/paymentPlan/components/formPaymentPlan', [
             'paymentPlanService' => $services,
-            'paymentPlanPeriod' => $periods
+            'paymentPlanPeriod' => $periods,
+            'paymentPlanCustomer' => $customers
         ]);
     }
 
@@ -85,7 +94,7 @@ class PaymentPlanController extends Controller
         $validated['payment_type'] = $validated['payment_type'] === 'anual';
 
         $paymentPlan = PaymentPlan::create($validated);
-
+        SendNotificationPayJob::dispatch('briamrebaza@hotmail.com');
         return redirect()
             ->route('panel.paymentPlans.index')
             ->with('message', 'Plan de pago "' . $paymentPlan->id . '" creado correctamente');
@@ -113,16 +122,13 @@ class PaymentPlanController extends Controller
     public function update(UpdatePaymentPlanRequest $request, PaymentPlan $paymentPlan)
     {
         Gate::authorize('update', $paymentPlan);
-
         $validated = $request->validated();
-
-        $validated['state'] = ($validated['state'] ?? 'inactivo') === 'activo';
         $validated['payment_type'] = ($validated['payment_type'] ?? 'mensual') === 'anual';
 
         $paymentPlan->update($validated);
 
         return response()->json([
-            'state' => true,
+            'status' => true,
             'message' => 'Plan de pago actualizado correctamente',
             'paymentPlan' => new PaymentPlanResource($paymentPlan)
         ]);

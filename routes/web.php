@@ -22,6 +22,7 @@ use App\Http\Controllers\PaymentPlanController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\Reportes\CustomerPDFController;
 use App\Http\Controllers\Reportes\PeriodPDFController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -29,9 +30,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 # list prueba suppliers 
 
@@ -128,6 +128,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/import-excel-categories', [CategoryController::class, 'importExcel'])->name('reports.categories.import');
         });
 
+        # Ruta para dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth']);
+
         # Route group for inputs, selects and autocomplete
         Route::prefix('inputs')->name('inputs.')->group(function () {
             # get client_type list
@@ -135,6 +138,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('categories_list', [SelectController::class, 'getCategoriesList'])->name('categories_list');
             Route::get('service_list', [SelectController::class, 'getServiceList'])->name('service_list');
             Route::get('period_list', [SelectController::class, 'getPeriodList'])->name('period_list');
+            Route::get('customer_list', [SelectController::class, 'getCustomerList'])->name('customer_list');
             Route::get('discount_list', [SelectController::class, 'getDiscountList'])->name('discount_list');
             // automplete
             Route::get('suppliers_list', [AutoCompleteController::class, 'getSuppliersList'])->name('suppliers_list');

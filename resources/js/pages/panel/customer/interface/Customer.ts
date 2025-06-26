@@ -34,7 +34,7 @@ export type CustomerRequestUpdate = {
 };
 
 export type showCustomerResponse = {
-    state: boolean;
+    status: boolean;
     message: string;
     customer: CustomerResource;
 };

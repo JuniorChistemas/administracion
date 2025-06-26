@@ -17,7 +17,7 @@ class PaymentPlanObserver
         if (!$paymentPlan->payment_type) {
             for ($i = 0; $i < $paymentPlan->duration; $i++) {
                 Payment::create([
-                    'customer_id' => 1,
+                    'customer_id' => $paymentPlan->customer_id,
                     'payment_plan_id' => $paymentPlan->id,
                     'discount_id' => 1,
                     'amount' => $paymentPlan->amount,
@@ -30,7 +30,7 @@ class PaymentPlanObserver
         } else {
             for ($i = 0; $i < $paymentPlan->duration; $i++) {
                 Payment::create([
-                    'customer_id' => 1,
+                    'customer_id' => $paymentPlan->customer_id,
                     'payment_plan_id' => $paymentPlan->id,
                     'discount_id' => 1,
                     'amount' => $paymentPlan->amount,
@@ -48,7 +48,15 @@ class PaymentPlanObserver
      */
     public function updated(PaymentPlan $paymentPlan): void
     {
-        //
+        // Solo si el monto fue modificado
+    if ($paymentPlan->isDirty('amount')) {
+        // Solo actualizar los pagos que están pendientes
+        $paymentPlan->payments()
+            ->where('status', 'pendiente')
+            ->update([
+                'amount' => $paymentPlan->amount,
+            ]);
+    }
     }
 
     /**

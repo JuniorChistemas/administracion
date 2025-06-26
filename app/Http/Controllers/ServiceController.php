@@ -93,6 +93,7 @@ class ServiceController extends Controller
         Gate::authorize('update', $service);
         try {
             $validatedData = $request->validated();
+            $validated['state'] = ($validated['state'] ?? 'inactivo') === 'activo';
             $service->update($validatedData);
             return response()->json(new ServiceResource($service));
         } catch (\Throwable $th) {

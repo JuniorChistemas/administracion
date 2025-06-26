@@ -4,6 +4,7 @@ namespace App\Services\Sunat;
 
 use Greenter\Model\Sale\Invoice;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\File;
 
 class GeneratePdf
@@ -179,6 +180,12 @@ HTML;
 </body>
 </html>
 HTML;
+
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isRemoteEnabled', true);
+$options->set('defaultFont', 'Helvetica');
+$options->set('dpi', 72);
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
