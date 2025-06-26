@@ -11,7 +11,7 @@
             <!-- Formulario -->
             <form @submit="onSubmit" class="flex flex-col gap-4 py-4">
                 <!-- Seleccionar el Servicio -->
-                <FormField v-slot="{ componentField }" name="service_name">
+                <FormField v-slot="{ componentField }" name="service_id">
                     <FormItem>
                         <FormLabel>Servicio</FormLabel>
                         <FormControl>
@@ -33,7 +33,7 @@
                 </FormField>
 
                 <!-- Seleccionar el periodo -->
-                <FormField v-slot="{ componentField }" name="period_name">
+                <FormField v-slot="{ componentField }" name="period_id">
                     <FormItem>
                         <FormLabel>Periodo</FormLabel>
                         <FormControl>
@@ -85,12 +85,12 @@
 
                 <!-- Duracción -->
                 <FormField v-slot="{ componentField }" name="duration">
-                <FormItem>
-                    <FormLabel>Duración</FormLabel>
-                    <FormControl>
-                        <Input v-bind="componentField" type="number" step="0.01" placeholder="Ingrese la duración" />
-                    </FormControl>
-                </FormItem>
+                    <FormItem>
+                        <FormLabel>Duración</FormLabel>
+                        <FormControl>
+                            <Input v-bind="componentField" type="number" step="0.01" placeholder="Ingrese la duración" />
+                        </FormControl>
+                    </FormItem>
                 </FormField>
 
                 <!-- Activo o inactivo -->
@@ -114,6 +114,10 @@
                         <FormMessage />
                     </FormItem>
                 </FormField>
+                <DialogFooter class="flex justify-end gap-2">
+                    <Button type="submit">Guardar Cambios</Button>
+                    <Button type="button" variant="outline" @click="closeModal">Cancelar</Button>
+                </DialogFooter>
             </form>
         </DialogContent>
     </Dialog>
@@ -131,6 +135,7 @@ import { watch } from 'vue';
 import { z } from 'zod';
 import { InputService, InputPeriod } from '@/interface/Inputs';
 import { PaymentPlanRequestUpdate, PaymentPlanResource } from '../interface/PaymentPlan';
+
 
 const props = defineProps<{
     modal: boolean;
