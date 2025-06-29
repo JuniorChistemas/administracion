@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
+use App\Jobs\SendPdfEmailJob;
+use App\Jobs\SendNotificationPayFalseJob;
 use App\Models\Discount;
 use App\Models\Payment;
 use App\Models\PaymentPlan;
 use App\Services\Payment\PaymentDocumentService;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -142,7 +145,7 @@ class PaymentController extends Controller
      */
     public function update(UpdatePaymentRequest $request, Payment $payment)
     {
-       Gate::authorize('update', $payment);
+        Gate::authorize('update', $payment);
 
         $data = $request->validated();
         $originalFields = ['customer_id', 'payment_plan_id', 'discount_id'];
@@ -169,19 +172,51 @@ class PaymentController extends Controller
             'payment' => new PaymentResource($payment),
         ];
 
-        // Generate document if status changed to 'pagado'
+        // ✅ Generar documento y enviar PDF si el estado cambia a "pagado"
         if ($wasPendingOrVencido && $isNowPagado) {
             try {
                 $documentData = $this->paymentDocumentService->generateDocument($payment);
                 $responseData['document'] = $documentData;
-            } catch (\Exception $e) {
-                Log::error('Failed to generate document', ['error' => $e->getMessage()]);
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Error generating document: ' . $e->getMessage(),
-                ], 500);
-            }
+
+           $pdfPath = $documentData['pdf_path'] ?? null;
+
+Log::debug('Ruta PDF recibida del documentData', [
+    'pdf_path' => $pdfPath,
+    'all_data' => $documentData,
+]);
+
+if ($pdfPath) {
+    $relativePdfPath = str_replace(Storage::disk('public')->path(''), '', $pdfPath);
+
+if (Storage::disk('public')->exists($relativePdfPath)) {
+    $correoDestino = 'briamrebaza@hotmail.com';
+    SendPdfEmailJob::dispatch($pdfPath, $correoDestino);
+    Log::info('Se envió el Job para enviar el PDF por correo.', ['correo' => $correoDestino]);
+    } else {
+        Log::warning('PDF no encontrado por Storage::exists.', [
+            'relative_path' => $relativePdfPath,
+            'full_path' => $pdfPath,
+        ]);
+    }
+} else {
+    Log::warning('PDF path no proporcionado.', [
+        'payment_id' => $payment->id,
+        'document_data_keys' => array_keys($documentData),
+    ]);
+}
+
+        } catch (\Exception $e) {
+            Log::error('Error al generar o enviar el comprobante PDF.', ['error' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al generar el documento: ' . $e->getMessage(),
+            ], 500);
         }
+    }
+
+    if ($data['status'] === 'vencido') {
+        SendNotificationPayFalseJob::dispatch('briamrebaza@hotmail.com');
+    }
 
         return response()->json($responseData);
     }

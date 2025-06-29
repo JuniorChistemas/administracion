@@ -18,6 +18,7 @@
                     :payment-plan-data="principal.paymentPlanData"
                     :modal="principal.stateModal.update"
                     :payment-plan-service="principal.serviceList"
+                    :payment-plan-customer="principal.customerList"
                     :payment-plan-period="principal.periodList"
                     @close-modal="closeModel"
                     @update-payment-plan="emitUpdatePaymentPlan"

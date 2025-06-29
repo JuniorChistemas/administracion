@@ -18,8 +18,13 @@ class ServicePDFController extends Controller
                 'id' => $service->id,
                 'name' => $service->name,
                 'cost' => $service->cost,
-                'ini_date' => $service->ini_date,
-                'state' => $service->state === 'activo' ? 'Activo' : ($service->state === 'pendiente' ? 'Pendiente' : 'Inactivo'),
+                'ini_date' => date('d-m-Y', strtotime($service->ini_date)),
+                'state' => match ($service->state) {
+                'activo' => 'Activo',
+                'pendiente' => 'Pendiente',
+                'inactivo' => 'Inactivo',
+                default => 'Activo' // valor por defecto si no coincide con ninguno
+},
             ];
         })->toArray();
 

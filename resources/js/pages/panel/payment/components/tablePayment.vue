@@ -96,11 +96,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Pagination } from '@/interface/paginacion';
 import { SharedData } from '@/types';
 import { showSuccessMessage } from '@/utils/message';
+import { useToast } from '@/components/ui/toast';
 import { usePage } from '@inertiajs/vue3';
 import { Trash, UserPen } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import PaginationPayment from '../../category/components/paginationCategory.vue';
 import { PaymentResource } from '../interface/Payment';
+
+const { toast } = useToast();
 
 const emit = defineEmits<{
     (e: 'page-change', page: number): void;
@@ -125,9 +128,13 @@ const openModalDelete = (id: number) => {
     emit('open-modal-delete', id);
 };
 
+
 onMounted(() => {
     if (message.value) {
-        showSuccessMessage('Notificación', message.value);
+        toast({
+            title: 'Notificación',
+            description: message.value,
+        });
     }
 });
 </script>
