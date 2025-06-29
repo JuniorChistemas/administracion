@@ -7,11 +7,11 @@
 </head>
 <body>
     <h1>
-    Estado de pago enviado
+    Registro de Pago por Servicio
     </h1>
 
     <p>
-        Se ha enviado tu estado de pago
+        Se ha registrado su estado de pago correctamente: Estado: "Pendiente"
     </p>
 </body>
 </html>

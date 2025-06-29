@@ -50,7 +50,7 @@ class ServicesExport implements FromCollection, WithHeadings, WithMapping, WithS
     public function styles(Worksheet $sheet)
     {
         $sheet->getColumnDimension('A')->setWidth(8);   // ID
-        $sheet->getColumnDimension('B')->setWidth(30);  // Nombre
+        $sheet->getColumnDimension('B')->setWidth(50);  // Nombre
         $sheet->getColumnDimension('C')->setWidth(12);  // Costo
         $sheet->getColumnDimension('D')->setWidth(18);  // Fecha
         $sheet->getColumnDimension('E')->setWidth(15);  // Estado

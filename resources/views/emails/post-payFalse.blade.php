@@ -7,11 +7,11 @@
 </head>
 <body>
     <h1>
-    Estado de pago enviado
+    Estado de pago actualizado
     </h1>
 
     <p>
-        Su pago mensual ha vencido
+        Lo sentimos, su pago mensual ha vencido.
     </p>
 </body>
 </html>

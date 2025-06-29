@@ -124,7 +124,7 @@ const emit = defineEmits<{
 
 const page = usePage<SharedData>();
 
-// 🔥 MODIFICADO: control del ordenamiento
+// Control del ordenamiento
 const sortField = ref('');
 const sortDirection = ref<'asc' | 'desc'>('asc');
 

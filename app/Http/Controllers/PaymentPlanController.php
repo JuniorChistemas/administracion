@@ -58,7 +58,7 @@ class PaymentPlanController extends Controller
      */
     public function create()
     {
-        $services = Service::select('id', 'name')
+        $services = Service::select('id', 'name', 'cost')
             ->where('state', 1)
             ->orderBy('id')
             ->get();

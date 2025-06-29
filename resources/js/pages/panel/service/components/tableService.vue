@@ -112,7 +112,7 @@ import { ServiceResource } from '../interface/Service';
 const { toast } = useToast();
 
 
-// 🔥 MODIFICADO: control del ordenamiento
+// Control del ordenamiento
 const sortField = ref('');
 const sortDirection = ref<'asc' | 'desc'>('asc');
 

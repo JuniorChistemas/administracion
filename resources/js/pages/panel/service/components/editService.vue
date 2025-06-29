@@ -113,7 +113,6 @@ const { handleSubmit, setValues } = useForm({
 });
 
 // Watch for changes in service data
-// Watch for changes in service data
 watch(
   () => props.serviceData,
   (newData) => {

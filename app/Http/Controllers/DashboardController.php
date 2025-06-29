@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Payment;
+use Illuminate\Support\Facades\DB;
 use carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,6 +32,16 @@ public function index()
         ->groupBy('mes')
         ->pluck('total', 'mes');
 
+    // Montos pagados por año
+$pagosPorAño = Payment::where('status', 'pagado')
+    ->selectRaw('EXTRACT(YEAR FROM payment_date) as anio, SUM(amount) as total')
+    ->groupBy('anio')
+    ->orderBy('anio')
+    ->get();
+
+$labelsAño = $pagosPorAño->pluck('anio')->map(fn($a) => (string) $a)->toArray();
+$montosAño = $pagosPorAño->pluck('total')->map(fn($m) => (float) $m)->toArray();
+
 // Monto total pagado por mes en 2025
     $montoPagadoPorMes = Payment::where('status', 'pagado')
         ->whereYear('payment_date', 2025)
@@ -38,6 +49,22 @@ public function index()
         ->groupBy('mes')
         ->orderBy('mes')
         ->get();
+
+
+        // Clientes que más han pagado por servicios
+   $clientesChart = Payment::where('status', 'pagado')
+    ->whereYear('payment_date', 2025)
+    ->join('customers', 'payments.customer_id', '=', 'customers.id')
+    ->selectRaw('customers.name as nombre, SUM(amount) as total_pagado')
+    ->groupBy('customers.name')
+    ->orderByDesc('total_pagado')
+    ->limit(10)
+    ->get();
+
+$labelsClientes = $clientesChart->pluck('nombre');
+$valuesClientes = $clientesChart->pluck('total_pagado')->map(fn($v) => (float) $v);
+
+
 
 // Convertir a arrays simples
 $montoPagadoChart = [
@@ -59,6 +86,12 @@ $montoPagadoChart = [
         'noPagados' => $valoresNoPagados,
     'labelsMontos' => $montoPagadoChart['labels'],
     'valoresMontos' => $montoPagadoChart['values'],
+    'labelsPorAnio' => $labelsAño,
+    'montosPorAnio' => $montosAño,
+        'clientesChart' => [
+        'labels' => $labelsClientes,
+        'values' => $valuesClientes,
+    ],
     ]);
 }
 }

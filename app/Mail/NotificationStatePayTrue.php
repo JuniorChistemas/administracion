@@ -39,7 +39,7 @@ class NotificationStatePayTrue extends Mailable implements ShouldQueue
     {
         return [
             Attachment::fromPath($this->pdfPath)
-                ->as('comprobante.pdf')
+                ->as('Comprobante de Pago.pdf')
                 ->withMime('application/pdf'),
         ];
     }

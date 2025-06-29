@@ -18,6 +18,13 @@ const props = defineProps<{
   montosPagados: number;
   labelsMontos: string[];
   valoresMontos: number[];
+  labelsPorAnio: string[];
+  montosPorAnio: number[];
+  clientesChart: {
+    labels: string[];
+    values: number[];
+  };
+
 }>();
 
 const chartData = {
@@ -32,7 +39,19 @@ const chartData = {
     labels: props.labelsMontos,
     values: props.valoresMontos,
   },
+    ventasAnuales: {
+    labels: props.labelsPorAnio,
+    values: props.montosPorAnio,
+  },
+  clientes: {
+    labels: props.clientesChart.labels,
+    values: props.clientesChart.values,
+  },
 };
+
+console.log('Clientes Labels:', chartData.clientes.labels);
+console.log('Clientes Values:', chartData.clientes.values);
+
 </script>
 
 <template>
@@ -54,13 +73,34 @@ const chartData = {
           />
         </div>
 
-        <!-- Módulo 2: Placeholder -->
-        <div class="relative aspect-auto overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-muted/40" />
+          <!-- Módulo 2: Ventas anuales -->
+          <div
+            class="relative aspect-auto overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
+          >
+            <CustomerChart
+              :columns-x="chartData.ventasAnuales.labels"
+              :series="[
+                { name: 'Ventas Pagadas', data: chartData.ventasAnuales.values }
+              ]"
+              title="Ventas Anuales"
+              subtitle="Montos pagados por año"
+              chart-type="area"
+            />
+          </div>
 
-        <!-- Módulo 3: Placeholder -->
-        <div class="relative aspect-auto overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-muted/40" />
+        <!-- Módulo 3: Clientes con mayor monto pagado -->
+          <div class="relative aspect-auto overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+          <CustomerChart
+  :columns-x="chartData.clientes.labels"
+  :series="[
+    { name: 'Clientes', data: chartData.clientes.values }
+  ]"
+  title="Top Clientes"
+  subtitle="Clientes con mayores montos pagados"
+  chart-type="bar"
+/>
+          </div>
       </div>
-
       <!-- Módulo grande: Gráfico de Montos Pagados -->
 <div class="relative h-[400px] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white p-6">
 <CustomerChart

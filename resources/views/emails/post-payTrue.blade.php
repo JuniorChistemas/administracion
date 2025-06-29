@@ -7,11 +7,13 @@
 </head>
 <body>
     <h1>
-    Estado de pago enviado
+    Estado de pago actualizado
     </h1>
 
     <p>
-        Muchas gracias por tu pago. Tu estado de pago ha sido enviado correctamente.
+        Muchas gracias por realizar el pago. Tu estado de pago de este mes ha sido actualizado correctamente.
+
+        Le adjuntamos su comprobante de pago respectivo. Gracias!
     </p>
 </body>
 </html>

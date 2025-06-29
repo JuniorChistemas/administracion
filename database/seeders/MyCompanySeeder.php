@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\MyCompany;
+use Illuminate\Support\Facades\DB;
 
 
 class MyCompanySeeder extends Seeder
@@ -14,16 +15,19 @@ class MyCompanySeeder extends Seeder
      */
     public function run(): void
     {
+         // Borra todos los registros existentes
+        //DB::table('mycompany')->truncate();
+
         MyCompany::factory()->create([
             'ruc' => '20412345678',
-            'razon_social' => 'Mi Empresa SAC',
+            'razon_social' => 'SOLUCIONES EN INGENIERIA T&J',
             'nombre_comercial' => 'MiComercial',
             'ubigueo' => '150101',
-            'departamento' => 'Lima',
-            'provincia' => 'Lima',
-            'distrito' => 'Lima',
+            'departamento' => 'Piura',
+            'provincia' => 'Piura',
+            'distrito' => 'Piura',
             'urbanizacion' => null,
-            'direccion' => 'Av. Siempre Viva 742',
+            'direccion' => 'Urb. Sol de Piura Los Portales Mz B12 Lote 1',
             'cod_local' => '0000',
         ]);
     }

@@ -3,6 +3,8 @@
 namespace App\Services\Sunat;
 
 use Greenter\Model\Sale\Invoice;
+use Greenter\Model\Sale\Legend;
+use Greenter\Model\Sale\SaleDetail;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\File;
@@ -25,6 +27,8 @@ class GeneratePdf
         $logoContent = File::get($logoPath);
         $logoBase64 = 'data:image/png;base64,' . base64_encode($logoContent);
 
+        //hora
+        $horaEmision = (new \DateTime())->format('H:i:s');
         // HTML template
         $html = <<<HTML
 <!DOCTYPE html>
@@ -98,7 +102,7 @@ class GeneratePdf
                 <div class="info-block">
                     <h3>Datos del Comprobante</h3>
                     <p><strong>Fecha Emisión:</strong> {$invoice->getFechaEmision()->format('d/m/Y')}</p>
-                    <p><strong>Hora Emisión:</strong> {$invoice->getFechaEmision()->format('H:i:s')}</p>
+                    <p><strong>Hora Emisión:</strong> {$horaEmision}</p>
                     <p><strong>Moneda:</strong> {$invoice->getTipoMoneda()}</p>
                     <p><strong>Tipo de Operación:</strong> Venta</p>
                 </div>
