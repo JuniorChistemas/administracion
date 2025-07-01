@@ -11,11 +11,13 @@ use App\Jobs\SendNotificationPayFalseJob;
 use App\Models\Discount;
 use App\Models\Payment;
 use App\Models\PaymentPlan;
+use App\Exports\PaymentExport;
 use App\Services\Payment\PaymentDocumentService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Inertia\Inertia;
 
 class PaymentController extends Controller
@@ -40,34 +42,40 @@ class PaymentController extends Controller
     public function listPayments(Request $request)
     {
         Gate::authorize('viewAny', Payment::class);
-        try {
-            $customer = $request->get('customer');
-            $payments = Payment::with(['customer', 'paymentPlan', 'discount'])
-                ->when($customer, function ($query, $customer) {
-                    return $query->whereHas('customer', function ($query) use ($customer) {
-                        $query->where('name', 'like', "%$customer%");
-                    });
-                })
-                ->orderBy('id', 'asc')
-                ->paginate(12);
-            return response()->json([
-                'payments' => PaymentResource::collection($payments),
-                'pagination' => [
-                    'total' => $payments->total(),
-                    'current_page' => $payments->currentPage(),
-                    'per_page' => $payments->perPage(),
-                    'last_page' => $payments->lastPage(),
-                    'from' => $payments->firstItem(),
-                    'to' => $payments->lastItem()
-                ]
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Error al listar los pagos',
-                'error' => $th->getMessage()
-            ], 500);
-        }
+    try {
+        $customer = $request->get('customer');
+        $status = $request->get('status');
+
+        $payments = Payment::with(['customer', 'paymentPlan', 'discount'])
+            ->when($customer, function ($query, $customer) {
+                $query->whereHas('customer', function ($query) use ($customer) {
+                    $query->where('name', 'like', "%$customer%");
+                });
+            })
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('id', 'asc')
+            ->paginate(12);
+
+        return response()->json([
+            'payments' => PaymentResource::collection($payments),
+            'pagination' => [
+                'total' => $payments->total(),
+                'current_page' => $payments->currentPage(),
+                'per_page' => $payments->perPage(),
+                'last_page' => $payments->lastPage(),
+                'from' => $payments->firstItem(),
+                'to' => $payments->lastItem()
+            ]
+        ]);
+    } catch (\Throwable $th) {
+        return response()->json([
+            'message' => 'Error al listar los pagos',
+            'error' => $th->getMessage()
+        ], 500);
     }
+}
 
 
 
@@ -232,5 +240,9 @@ if (Storage::disk('public')->exists($relativePdfPath)) {
             'status' => true,
             'message' => 'Pago eliminado correctamente',
         ]);
+    }
+            public function exportExcel()
+    {
+        return Excel::download(new PaymentExport, 'Pagos.xlsx');
     }
 }

@@ -11,7 +11,7 @@ class ServicePDFController extends Controller
 {
     public function exportPDF()
     {
-        $services = Service::orderBy('id', 'asc')->get();
+        $services = Service::orderBy('name', 'asc')->get();
 
         $servicesArray = $services->map(function ($service) {
             return [

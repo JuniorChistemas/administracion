@@ -3,9 +3,16 @@
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <div class="mb-4 mt-4 flex items-center justify-between px-6">
-                    <FilterPayments @search="searchPayment" />
-                </div>
+<div class="mb-4 mt-4 flex justify-between px-6 mr-7">
+    <!-- ToolsPayments alineado a la izquierda -->
+    <ToolsPayments @import-success="loadingPayments" />
+
+    <!-- Filtros alineados a la derecha -->
+    <div class="flex items-center gap-x-4">
+        <FilterPayments @search="searchPayment" />
+        <StatusFilter @search="searchStatus" />
+    </div>
+</div>
                 <TablePayment
                     :payment-list="principal.paymentList"
                     :payment-paginate="principal.paginacion"
@@ -61,16 +68,20 @@
 <script setup lang="ts">
 import Delete from '@/components/delete.vue';
 import FilterPayments from '@/components/filter.vue';
+import StatusFilter from '@/components/ListFilter.vue';
 import { usePayment } from '@/composables/usePayment';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { toast } from '@/components/ui/toast'; 
 import EditPayment from './components/editPayment.vue';
 import TablePayment from './components/tablePayment.vue';
 import { updatePayment } from './interface/Payment';
+import { PaymentServices } from '@/services/paymentServices';
+import ToolsPayments from './components/toolsPayment.vue';
+
 
 const { loadingPayments, showPayment, principal, showPaymentData, updatePaymentF, deletePayment } = usePayment();
 
@@ -81,17 +92,41 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// emit events in component TablePayment
-const handlePageChange = (page: number) => {
-    loadingPayments(page);
+// 🔸 filtros activos
+const filterCustomer = ref('');
+const filterStatus = ref('');
+
+// 🔸 función local que reemplaza al loadingPayments del composable
+const loadingPaymentsWrapper = async (page: number = 1) => {
+    try {
+        principal.loading = true;
+        const response = await PaymentServices.index(page, filterCustomer.value, filterStatus.value);
+        principal.paymentList = response.payments;
+        principal.paginacion = response.pagination;
+    } catch (error) {
+        console.error('Error loading payments:', error);
+    } finally {
+        principal.loading = false;
+    }
 };
 
-// emit events in component EditPayment
+// 🔸 eventos
+const handlePageChange = (page: number) => {
+    loadingPaymentsWrapper(page);
+};
+
+const searchPayment = (text: string) => {
+    filterCustomer.value = text;
+    loadingPaymentsWrapper(1);
+};
+
+const searchStatus = (status: string) => {
+    filterStatus.value = status;
+    loadingPaymentsWrapper(1);
+};
+
 const closeModalUpdate = () => {
     principal.statusModalUpdate = false;
-};
-const searchPayment = (text: string) => {
-    loadingPayments(1, text);
 };
 
 const getIdUpdate = (id: number) => {
@@ -101,23 +136,20 @@ const getIdUpdate = (id: number) => {
 const getIdDelete = (id: number) => {
     principal.statusModalDelete = true;
     principal.payment_id_delete = id;
-    console.log('eliminar' + id);
 };
+
 const emitDeletePayment = (id: number | string) => {
     principal.statusModalDelete = false;
-    console.log('emitDeletePayment', id);
     deletePayment(Number(id));
 };
+
 const clouseModalDelete = () => {
     principal.statusModalDelete = false;
 };
 
-// get data from editPayment
 const dataUpdatePayment = async (data: updatePayment, id: number) => {
     try {
         const response = await updatePaymentF(data, id);
-        console.log('dataUpdatePayment', response);
-
         toast({
             title: 'Pago actualizado',
             description: 'El pago se actualizó correctamente',
@@ -135,8 +167,10 @@ const dataUpdatePayment = async (data: updatePayment, id: number) => {
     }
 };
 
+// cargar datos al iniciar
 onMounted(() => {
-    loadingPayments();
+    loadingPaymentsWrapper();
 });
 </script>
+
 <style scoped></style>

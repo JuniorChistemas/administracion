@@ -19,6 +19,7 @@ import {
     Percent,
     Settings2,
     Shield,
+    SunMoon,
     Truck,
     User,
     UserSquare,
@@ -122,9 +123,14 @@ const mainNavItems2: NavItem[] = [
             //},
         ],
     },
-    
 ];
-
+const mainNavItems7: NavItem[] = [
+     {
+        title: 'Apariencia',
+        href: '/settings/appearance',
+        icon: SunMoon,
+    },
+];
 </script>
 
 <template>
@@ -149,6 +155,8 @@ const mainNavItems2: NavItem[] = [
                 :items4="mainNavItems4"
                 :items5="mainNavItems5"
                 :items6="mainNavItems6"
+                :items7="mainNavItems7"
+
             />
         </SidebarContent>
 

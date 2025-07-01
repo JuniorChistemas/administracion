@@ -22,6 +22,9 @@ use App\Http\Controllers\PaymentPlanController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\Reportes\CustomerPDFController;
 use App\Http\Controllers\Reportes\PeriodPDFController;
+use App\Http\Controllers\Reportes\PaymentPlanPDFController;
+use App\Http\Controllers\Reportes\PaymentPDFController;
+use App\Http\Controllers\Reportes\InvoicePDFController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -106,7 +109,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/export-excel-customers', [CustomerController::class, 'exportExcel'])->name('customers.excel');
             Route::get('/export-excel-periods', [PeriodController::class, 'exportExcel'])->name('periods.excel');
             Route::get('/export-excel-amounts', [AmountController::class, 'exportExcel'])->name('amounts.excel');
-
+            Route::get('/export-excel-payment_plans', [PaymentPlanController::class, 'exportExcel'])->name('payment_plans.excel');
+            Route::get('/export-excel-payments', [PaymentController::class, 'exportExcel'])->name('payments.excel');
+            Route::get('/export-excel-invoices', [InvoiceController::class, 'exportExcel'])->name('invoices.excel');
             # Exports to PDF
             Route::get('/export-pdf-users', [UserPDFController::class, 'exportPDF']);
             Route::get('/export-pdf-suppliers', [SupplierPDFController::class, 'exportPDF']);
@@ -116,6 +121,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/export-pdf-customers', [CustomerPDFController::class, 'exportPDF']);
             Route::get('/export-pdf-periods', [PeriodPDFController::class, 'exportPDF']);
             Route::get('/export-pdf-amounts', [AmountPDFController::class, 'exportPDF']);
+            Route::get('/export-pdf-payment_plans', [PaymentPlanPDFController::class, 'exportPDF']);
+            Route::get('/export-pdf-payments', [PaymentPDFController::class, 'exportPDF']);
+            Route::get('/export-pdf-invoices', [InvoicePDFController::class, 'exportPDF']);
 
             #Excel imports
             Route::post('/import-excel-clientTypes', [ClientTypeController::class, 'importExcel'])->name('reports.clientTypes.import');

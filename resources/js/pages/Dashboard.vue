@@ -15,6 +15,7 @@ const props = defineProps<{
   labels: string[];
   pagados: number[];
   noPagados: number[];
+  pendientes: number[];
   montosPagados: number;
   labelsMontos: string[];
   valoresMontos: number[];
@@ -33,6 +34,7 @@ const chartData = {
     series: [
       { name: 'Pagados', data: props.pagados },
       { name: 'Vencidos', data: props.noPagados },
+      { name: 'Pendientes', data: props.pendientes },
     ],
   },
   montos: {
@@ -68,7 +70,7 @@ console.log('Clientes Values:', chartData.clientes.values);
             :columns-x="chartData.comprobantes.labels"
             :series="chartData.comprobantes.series"
             title="Comprobantes por mes en el año"
-            subtitle="Pagados - Vencidos"
+            subtitle="Pagados - Vencidos - Pendientes"
             chart-type="bar"
           />
         </div>
@@ -102,7 +104,7 @@ console.log('Clientes Values:', chartData.clientes.values);
           </div>
       </div>
       <!-- Módulo grande: Gráfico de Montos Pagados -->
-<div class="relative h-[400px] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white p-6">
+<div class="relative h-[400px] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-6">
 <CustomerChart
   :columns-x="chartData.montos.labels"
   :series="[

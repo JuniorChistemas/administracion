@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SupplierSeeder::class,
             ClientTypeSeeder::class,
-            //ServiceSeeder::class,
+            ServiceSeeder::class,
             DiscountSeeder::class,
             CustomerSeeder::class,
             CategorySeeder::class,

@@ -23,7 +23,7 @@ class PaymentResource extends JsonResource
             'amount' => $this->amount,
             'payment_date' => Carbon::parse($this->payment_date)->format('d-m-Y'),
             'payment_method' => $this->payment_method,
-            'reference' => $this->reference ?? '---',
+            'reference' => $this->reference && trim($this->reference) !== '' ? $this->reference : '---',
             'status' => $this->status,
         ];
     }

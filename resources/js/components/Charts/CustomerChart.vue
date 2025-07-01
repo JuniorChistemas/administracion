@@ -39,7 +39,7 @@ const getCssVariable = (variableName: string): string => {
 };
 
 const updateChartColors = () => {
-  chartColors.value = ['#22c55e', '#ef4444']; // Verde y rojo (por defecto)
+  chartColors.value = ['#22c55e', '#ef4444', '#facc15']; // Verde , Rojo, Amarillo
 };
 
 onMounted(() => {

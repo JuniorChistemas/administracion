@@ -43,12 +43,12 @@
                     <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
                         <TableRow v-for="paymentPlan in paymentPlanList" :key="paymentPlan.id" class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30">
                             <TableCell class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">{{ paymentPlan.id }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.service_name }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.customer_name }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.period_name }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.payment_type ? 'Anual' : 'Mensual' }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.amount }}</TableCell>
-                            <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-400">{{ paymentPlan.duration }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.service_name }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.customer_name }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.period_name }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.payment_type ? 'Anual' : 'Mensual' }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.amount }}</TableCell>
+                            <TableCell class="px-4 py-3 font-medium text-gray-700 dark:text-gray-400">{{ paymentPlan.duration }}</TableCell>
                             <TableCell class="px-4 py-3">
                                 <span v-if="paymentPlan.state === true" class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900/30 dark:text-green-200">
                                     <span class="mr-1 h-2 w-2 rounded-full bg-green-500 dark:bg-green-400"></span>Activo

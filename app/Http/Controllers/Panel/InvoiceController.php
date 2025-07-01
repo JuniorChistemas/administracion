@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use App\Models\VoidedDocument;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InvoiceExport;
 use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -425,5 +427,9 @@ class InvoiceController extends Controller
             ]);
             abort(500, 'Error downloading voided CDR');
         }
+    }
+                public function exportExcel()
+    {
+        return Excel::download(new InvoiceExport, 'ListaComprobantes.xlsx');
     }
 }

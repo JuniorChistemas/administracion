@@ -31,6 +31,12 @@ public function index()
         ->selectRaw("TO_CHAR(payment_date, 'YYYY-MM') as mes, COUNT(*) as total")
         ->groupBy('mes')
         ->pluck('total', 'mes');
+        // Vencidos por mes
+    $pendientes = Payment::where('status', 'pendiente')
+        ->whereYear('payment_date', 2025)
+        ->selectRaw("TO_CHAR(payment_date, 'YYYY-MM') as mes, COUNT(*) as total")
+        ->groupBy('mes')
+        ->pluck('total', 'mes');
 
     // Montos pagados por año
 $pagosPorAño = Payment::where('status', 'pagado')
@@ -79,11 +85,14 @@ $montoPagadoChart = [
 
     $valoresPagados = $meses->map(fn($m) => $pagados[$m] ?? 0);
     $valoresNoPagados = $meses->map(fn($m) => $noPagados[$m] ?? 0);
+    $valoresPendientes = $meses->map(fn($m) => $pendientes[$m] ?? 0);
+
 
     return Inertia::render('Dashboard', [
         'labels' => $labels,
         'pagados' => $valoresPagados,
         'noPagados' => $valoresNoPagados,
+        'pendientes' => $valoresPendientes,
     'labelsMontos' => $montoPagadoChart['labels'],
     'valoresMontos' => $montoPagadoChart['values'],
     'labelsPorAnio' => $labelsAño,

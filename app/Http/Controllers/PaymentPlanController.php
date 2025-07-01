@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PaymentPlanExport;
 use App\Models\PaymentPlan;
 use App\Http\Requests\StorePaymentPlanRequest;
 use App\Http\Requests\UpdatePaymentPlanRequest;
 use App\Http\Resources\PaymentPlanResource;
 use App\Models\Period;
 use App\Models\Service;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Customer;
 use App\Jobs\SendNotificationPayJob;
 use Illuminate\Http\Request;
@@ -145,5 +147,10 @@ class PaymentPlanController extends Controller
             'status' => true,
             'message' => 'Plan de pago eliminado correctamente'
         ]);
+    }
+
+        public function exportExcel()
+    {
+        return Excel::download(new PaymentPlanExport, 'plandepago.xlsx');
     }
 }

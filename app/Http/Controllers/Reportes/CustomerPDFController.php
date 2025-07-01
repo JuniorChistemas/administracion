@@ -10,7 +10,7 @@ class CustomerPDFController extends Controller
 {
     public function exportPDF()
     {
-        $customers = Customer::orderBy('id', 'asc')->get();
+        $customers = Customer::orderBy('name', 'asc')->get();
 
         $customersArray = $customers->map(function ($customer) {
             return [
@@ -43,7 +43,7 @@ class CustomerPDFController extends Controller
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->SetFillColor(242, 242, 242);
 
-        $header = ['ID', 'Nombre', 'Código', 'Tipo de cliente','created_at', 'Estado'];
+        $header = ['ID', 'Nombre', 'Código', 'Tipo de cliente','Fecha de creación', 'Estado'];
         $widths = [15, 50, 30, 30, 30, 30];
 
         foreach ($header as $i => $col) {

@@ -17,7 +17,7 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, With
     */
     public function collection()
     {
-        return Customer::orderBy('id', 'asc')->get();
+        return Customer::orderBy('name', 'asc')->get();
     }
 
     public function map($customer):array
@@ -52,38 +52,25 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, With
     {
         $sheet->getColumnDimension('A')->setWidth(8);   // ID
         $sheet->getColumnDimension('B')->setWidth(30);  // Nombre
-        $sheet->getColumnDimension('C')->setWidth(15);  // Costo
-        $sheet->getColumnDimension('D')->setWidth(15);  // Fecha
-        $sheet->getColumnDimension('E')->setWidth(25);  // Estado
+        $sheet->getColumnDimension('C')->setWidth(15);  // Codigo
+        $sheet->getColumnDimension('D')->setWidth(15);  // Tipo de cliente
+        $sheet->getColumnDimension('E')->setWidth(25);  // Fecha
         $sheet->getColumnDimension('F')->setWidth(10);  // Estado
         
-        $sheet->getStyle('A1:E1')->applyFromArray([
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => 'center',
-                'vertical' => 'center',
-            ],  
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => 'thin',
-                ],
-            ],
+        $sheet->getStyle('A1:F1')->applyFromArray([
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
+            'borders' => ['allBorders' => ['borderStyle' => 'thin']],
         ]);
 
-        $sheet->getStyle('A2:E' . ($sheet->getHighestRow()))->applyFromArray([
+        $highestRow = $sheet->getHighestRow();
 
-            'alignment' => [
-                'horizontal' => 'center',
-                'vertical' => 'center',
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => 'thin',
-                ],
-            ],
+        $sheet->getStyle('A2:F' . $highestRow)->applyFromArray([
+            'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
+            'borders' => ['allBorders' => ['borderStyle' => 'thin']],
         ]);
+
+        $sheet->getStyle('E2:E' . $highestRow)->getNumberFormat()->setFormatCode('[$S/] #,##0.00');
 
         return [];
     }
