@@ -119,16 +119,31 @@ class GenerateComprobante
 
     protected function storeInvoice(Invoice $invoice, int $idPago, $result): void
     {
-        $cdrStatus = $this->processCdr($result->getCdrResponse());
-        $documentType = $invoice->getTipoDoc() === '01' ? 'F' : 'B'; // 'F' for factura, 'B' for boleta
+    $cdrStatus = $this->processCdr($result->getCdrResponse());
+    $documentType = $invoice->getTipoDoc() === '01' ? 'F' : 'B';
+    $serie = $invoice->getSerie();
+    $correlativo = $invoice->getCorrelativo();
 
-        InvoiceModel::create([
-            'payment_id' => $idPago,
-            'document_type' => $documentType,
-            'serie_assigned' => $invoice->getSerie(),
-            'correlative_assigned' => $invoice->getCorrelativo(),
-            'sunat' => $cdrStatus['estado'] === 'ACCEPTED' ? 'enviado' : 'anulado',
+    // ✅ ACA SE CAMBIO: Verificar si ya existe antes de insertar
+    $exists = InvoiceModel::where('serie_assigned', $serie)
+        ->where('correlative_assigned', $correlativo)
+        ->exists();
+
+    if ($exists) {
+        Log::warning('Ya existe un comprobante con esa serie y correlativo', [
+            'serie' => $serie,
+            'correlativo' => $correlativo,
         ]);
+        throw new \Exception("Ya existe un comprobante con la serie {$serie} y correlativo {$correlativo}");
+    }
+
+    InvoiceModel::create([
+        'payment_id' => $idPago,
+        'document_type' => $documentType,
+        'serie_assigned' => $serie,
+        'correlative_assigned' => $correlativo,
+        'sunat' => $cdrStatus['estado'] === 'ACCEPTED' ? 'enviado' : 'anulado',
+    ]);
     }
 
     protected function buildClient(array $clientData, string $type): Client

@@ -27,7 +27,7 @@ class NotificationStatePay extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Enviar notificación de pago',
+            subject: 'Enviar notificación de estado de pago',
         );
     }
 

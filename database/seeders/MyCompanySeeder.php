@@ -16,10 +16,10 @@ class MyCompanySeeder extends Seeder
     public function run(): void
     {
          // Borra todos los registros existentes
-        //DB::table('mycompany')->truncate();
+        DB::table('mycompany')->truncate();
 
         MyCompany::factory()->create([
-            'ruc' => '20412345678',
+            'ruc' => '20000000001',
             'razon_social' => 'SOLUCIONES EN INGENIERIA T&J',
             'nombre_comercial' => 'MiComercial',
             'ubigueo' => '150101',

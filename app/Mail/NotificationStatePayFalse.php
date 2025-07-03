@@ -27,7 +27,7 @@ class NotificationStatePayFalse extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Notification State Pay',
+            subject: 'Notificación estado vencido',
         );
     }
 

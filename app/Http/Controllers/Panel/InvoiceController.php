@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Sunat\ComprobanteController;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use Carbon\Carbon;
+use App\Models\Payment;
+use App\Models\MyCompany;
+use App\Services\Sunat\GeneratePdf;
+use App\Services\Sunat\GenerateComprobante;
 use App\Models\VoidedDocument;
+use App\Services\Sunat\VoidComprobante;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoiceExport;
 use Carbon\Exceptions\Exception;
@@ -19,6 +26,13 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoiceController extends Controller
 {
+
+        protected $voidComprobanteService;
+
+    public function __construct(VoidComprobante $voidComprobanteService)
+    {
+        $this->voidComprobanteService = $voidComprobanteService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -85,9 +99,14 @@ class InvoiceController extends Controller
     /**
      * Annul the specified invoice (set sunat to 'anulado').
      */
-    public function annul(Invoice $invoice)
+    public function annul(Request $request, Invoice $invoice)
     {
         Gate::authorize('delete', $invoice);
+
+            $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'motivo' => 'required|string|max:255',
+        ]);
         if ($invoice->sunat === 'anulado') {
             return response()->json([
                 'status' => false,
@@ -95,13 +114,35 @@ class InvoiceController extends Controller
             ], 400);
         }
 
-        $invoice->sunat = 'anulado';
-        $invoice->save();
+        if ($request->invoice_id != $invoice->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'El invoice_id no coincide con el comprobante',
+            ], 400);
+        }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Comprobante anulado correctamente',
-        ]);
+        $start = microtime(true);
+        try {
+            $validated = $request->only(['invoice_id', 'motivo']);
+            $result = $this->voidComprobanteService->voidComprobante($validated);
+
+            Log::info('Comprobante voided', [
+                'invoice_id' => $validated['invoice_id'],
+                'execution_time' => microtime(true) - $start,
+            ]);
+        
+                return response()->json([
+                'message' => 'Comprobante voided successfully',
+                'data' => $result,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error voiding comprobante: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Error voiding comprobante',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    
     }
 
 
@@ -118,17 +159,17 @@ class InvoiceController extends Controller
         }
 
         // Obtener datos necesarios para generar el comprobante
-       $payment = \App\Models\Payment::with(['customer', 'paymentPlan.service'])->findOrFail($payment_id);
-        Log::info('Payment data for payment_id: ' . $payment_id, [
+            $payment = Payment::with(['customer', 'paymentPlan.service'])->findOrFail($payment_id);                  
+            Log::info('Payment data for payment_id: ' . $payment_id, [
             'payment' => $payment->toArray(),
             'payment_plan' => $payment->paymentPlan ? $payment->paymentPlan->toArray() : null,
             'service' => $payment->paymentPlan && $payment->paymentPlan->service ? $payment->paymentPlan->service->toArray() : null,
         ]);
-        $company = \App\Models\MyCompany::firstOrFail();
+        $company = MyCompany::firstOrFail();
 
         // Instanciar el servicio de generación de comprobantes
-        $pdfService = app(\App\Services\Sunat\GeneratePdf::class);
-        $generateComprobante = new \App\Services\Sunat\GenerateComprobante($pdfService);
+        $pdfService = app(GeneratePdf::class);
+        $generateComprobante = new GenerateComprobante($pdfService);
 
         // Construir datos para el comprobante
         $data = $this->buildComprobanteData($invoice, $payment, $company);
@@ -190,8 +231,7 @@ class InvoiceController extends Controller
         }
 
         // Log service data for debugging
-        Log::info('Service data used for payment_id: ' . $payment->id, [
-            'service_id' => $service->id,
+            Log::info(' personally for payment_id: ' . $payment->id, [            'service_id' => $service->id,
             'service_name' => $service->name,
         ]);
 
@@ -221,7 +261,7 @@ class InvoiceController extends Controller
             'tipo_operacion' => '0101',
             'serie' => $invoice->serie_assigned,
             'correlativo' => $invoice->correlative_assigned,
-            'fecha_emision' => now()->format('Y-m-d'),
+            'fecha_emision' => Carbon::parse($payment->payment_date)->setTimezone('America/Lima')->format('Y-m-d H:i:s'),
             'tipo_moneda' => 'PEN',
             'mto_oper_gravadas' => $mtoOperGravadas,
             'mto_igv' => $mtoIgv,
@@ -280,7 +320,7 @@ class InvoiceController extends Controller
 
         $decimalText = $decimalPart > 0 ? ' CON ' . ($decimalPart < 10 ? $units[$decimalPart] : $tens[floor($decimalPart / 10)] . ($decimalPart % 10 > 0 ? ' Y ' . $units[$decimalPart % 10] : '')) : '';
 
-        return strtoupper($integerText . $decimalText . ' SOLES');
+       return strtoupper($integerText . $decimalText . ' SOLES');
     }
 
     /**
@@ -419,7 +459,7 @@ class InvoiceController extends Controller
             return Storage::disk('public')->download($cdrPath, $fileName, [
                 'Content-Type' => 'application/zip',
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Error downloading voided CDR', [
                 'invoice_id' => $invoice->id,
                 'payment_id' => $payment_id ?? null,
